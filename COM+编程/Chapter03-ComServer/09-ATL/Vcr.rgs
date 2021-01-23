@@ -1,0 +1,12 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {318B4AD3-06A7-11d3-9B58-0080C8E11F14}
+		{
+			InprocServer32 = s '%MODULE%'
+		}
+	}
+}
+
+

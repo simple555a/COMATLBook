@@ -1,0 +1,41 @@
+// SyncTestNew.idl : IDL source for SyncTestNew.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SyncTestNew.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(DE0CF3B3-E803-4CF0-BC9E-3755C7A4A4EB),
+		dual,
+		helpstring("IPerson Interface"),
+		pointer_default(unique)
+	]
+	interface IPerson : IDispatch
+	{
+		[id(1), helpstring("method SetName")] HRESULT SetName([in] BSTR bsFirstName, [in] BSTR bsLastName);
+	};
+
+[
+	uuid(0831D217-10AB-467F-BED6-52C62633957B),
+	version(1.0),
+	helpstring("SyncTestNew 1.0 Type Library")
+]
+library SYNCTESTNEWLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(D68FE839-C09E-4EF6-810F-2A00B37003A7),
+		helpstring("Person Class")
+	]
+	coclass Person
+	{
+		[default] interface IPerson;
+	};
+};

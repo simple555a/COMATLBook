@@ -1,0 +1,42 @@
+// GlobalCount.idl : IDL source for GlobalCount.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (GlobalCount.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(F0416DD1-C167-45D9-9E38-CCB505A0A4EC),
+		dual,
+		helpstring("IMyCount Interface"),
+		pointer_default(unique)
+	]
+	interface IMyCount : IDispatch
+	{
+		[id(1), helpstring("method GetCount")] HRESULT GetCount([out, retval] long* plCount);
+		[id(2), helpstring("method IncrementCount")] HRESULT IncrementCount([in] long nValue);
+	};
+
+[
+	uuid(92A69672-4B64-4863-9954-88C805A32241),
+	version(1.0),
+	helpstring("GlobalCount 1.0 Type Library")
+]
+library GLOBALCOUNTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(F4D5EE0E-C07D-4AFC-A602-55700E437F5F),
+		helpstring("MyCount Class")
+	]
+	coclass MyCount
+	{
+		[default] interface IMyCount;
+	};
+};

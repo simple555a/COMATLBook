@@ -1,0 +1,23 @@
+HKCR
+{
+	TextFileDB.MyFileDB.1 = s 'MyFileDB Class'
+	{
+		CLSID = s '{7F99F9F5-37F1-43D2-B4D1-46EDD44E440C}'
+	}
+	TextFileDB.MyFileDB = s 'MyFileDB Class'
+	{
+		CLSID = s '{7F99F9F5-37F1-43D2-B4D1-46EDD44E440C}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7F99F9F5-37F1-43D2-B4D1-46EDD44E440C} = s 'MyFileDB Class'
+		{
+			ProgID = s 'TextFileDB.MyFileDB.1'
+			VersionIndependentProgID = s 'TextFileDB.MyFileDB'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

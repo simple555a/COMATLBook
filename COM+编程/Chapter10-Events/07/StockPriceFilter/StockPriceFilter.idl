@@ -1,0 +1,43 @@
+// StockPriceFilter.idl : IDL source for StockPriceFilter.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (StockPriceFilter.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "eventsys.idl";
+import "StockPrice.idl";
+	
+	[
+		object,
+		uuid(2161F4FD-E28D-4B38-804D-19E59D1AF00F),
+		helpstring("IMyFilterImpl Interface"),
+		pointer_default(unique)
+	]
+	interface IMyFilterImpl : IUnknown
+	{
+	};
+
+[
+	uuid(D1341BA5-60B2-4BC4-9381-E4AF9F8BE553),
+	version(1.0),
+	helpstring("StockPriceFilter 1.0 Type Library")
+]
+library STOCKPRICEFILTERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	importlib("StockPrice.tlb");
+	
+	[
+		uuid(7F90EF4A-549C-4D55-8F00-C274456B1075),
+		helpstring("MyFilterImpl Class")
+	]
+	coclass MyFilterImpl
+	{
+		[default] interface IMyFilterImpl;
+		interface IMyStockPriceEvent;
+		interface IMultiInterfacePublisherFilter;
+	};
+};

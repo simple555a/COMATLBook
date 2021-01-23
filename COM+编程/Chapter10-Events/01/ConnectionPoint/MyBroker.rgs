@@ -1,0 +1,23 @@
+HKCR
+{
+	ConnectionPoint.MyBroker.1 = s 'MyBroker Class'
+	{
+		CLSID = s '{47DFDAA2-A987-46BD-887E-1661C3F0F652}'
+	}
+	ConnectionPoint.MyBroker = s 'MyBroker Class'
+	{
+		CLSID = s '{47DFDAA2-A987-46BD-887E-1661C3F0F652}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {47DFDAA2-A987-46BD-887E-1661C3F0F652} = s 'MyBroker Class'
+		{
+			ProgID = s 'ConnectionPoint.MyBroker.1'
+			VersionIndependentProgID = s 'ConnectionPoint.MyBroker'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

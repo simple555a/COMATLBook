@@ -1,0 +1,40 @@
+// StockPrice.idl : IDL source for StockPrice.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (StockPrice.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+	[
+		object,
+		uuid(A9E6D819-1891-462D-B32C-ED4AFD61B08B),
+		dual,
+		helpstring("IMyStockPriceEvent Interface"),
+		pointer_default(unique)
+	]
+	interface IMyStockPriceEvent : IDispatch
+	{
+		[id(1), helpstring("method NewQuote")] HRESULT NewQuote([in] BSTR bsSymbol, [in] double dValue);
+	};
+
+[
+	uuid(50484A79-FBB2-4232-B875-50E977F5D41A),
+	version(1.0),
+	helpstring("StockPrice 1.0 Type Library")
+]
+library STOCKPRICELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	
+	[
+		uuid(1F6F353D-5738-4C05-9DA1-A64E19370A0E),
+		helpstring("MyStockPriceEvent Class")
+	]
+	coclass MyStockPriceEvent
+	{
+		[default] interface IMyStockPriceEvent;
+	};
+};

@@ -1,0 +1,46 @@
+// PhoneBook.idl : IDL source for PhoneBook.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (PhoneBook.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(5415390B-1030-4BD7-AF83-3C7CF51EBE55),
+		dual,
+		helpstring("IMyPhoneEntry Interface"),
+		pointer_default(unique)
+	]
+	interface IMyPhoneEntry : IDispatch
+	{
+		[propput, id(1), helpstring("property FirstName")] HRESULT FirstName([in] BSTR newVal);
+		[propput, id(2), helpstring("property LastName")] HRESULT LastName([in] BSTR newVal);
+		[propput, id(3), helpstring("property PhoneNumber")] HRESULT PhoneNumber([in] BSTR newVal);
+		[id(4), helpstring("method Update")] HRESULT Update();
+		[id(5), helpstring("method Response")] HRESULT Response([in] BSTR bsDesc);
+		[id(6), helpstring("method UpdateWithResponse")] HRESULT UpdateWithResponse([in] BSTR bsClientMachine);
+	};
+
+[
+	uuid(F6547A08-F56D-4113-ADB4-7FC04472ACAD),
+	version(1.0),
+	helpstring("PhoneBook 1.0 Type Library")
+]
+library PHONEBOOKLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(D8FEF07B-700D-4996-A327-A354F9B2E08E),
+		helpstring("MyPhoneEntry Class")
+	]
+	coclass MyPhoneEntry
+	{
+		[default] interface IMyPhoneEntry;
+	};
+};

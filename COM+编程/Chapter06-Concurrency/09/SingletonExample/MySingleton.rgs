@@ -1,0 +1,23 @@
+HKCR
+{
+	SingletonExample.MySingleton.1 = s 'MySingleton Class'
+	{
+		CLSID = s '{0164B179-0B23-4C23-9B50-E91114F6DFD2}'
+	}
+	SingletonExample.MySingleton = s 'MySingleton Class'
+	{
+		CLSID = s '{0164B179-0B23-4C23-9B50-E91114F6DFD2}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0164B179-0B23-4C23-9B50-E91114F6DFD2} = s 'MySingleton Class'
+		{
+			ProgID = s 'SingletonExample.MySingleton.1'
+			VersionIndependentProgID = s 'SingletonExample.MySingleton'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

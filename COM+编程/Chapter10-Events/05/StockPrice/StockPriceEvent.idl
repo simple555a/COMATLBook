@@ -1,0 +1,16 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+[
+	uuid(50484A79-FBB2-4232-B875-50E977F5D41A),
+	version(1.0),
+	helpstring("StockPrice 1.0 Type Library")
+]
+library DifferentSTOCKPRICELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	interface IMyStockPriceEvent;
+};

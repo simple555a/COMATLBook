@@ -1,0 +1,29 @@
+HKCR
+{
+	ConnPoints.MyStockWatcher.1 = s 'MyStockWatcher Class'
+	{
+		CLSID = s '{A5AC21C6-2376-420F-8080-05C84A73C4F7}'
+	}
+	ConnPoints.MyStockWatcher = s 'MyStockWatcher Class'
+	{
+		CLSID = s '{A5AC21C6-2376-420F-8080-05C84A73C4F7}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A5AC21C6-2376-420F-8080-05C84A73C4F7} = s 'MyStockWatcher Class'
+		{
+			ProgID = s 'ConnPoints.MyStockWatcher.1'
+			VersionIndependentProgID = s 'ConnPoints.MyStockWatcher'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'free'
+			}
+			'Implemented Categories'
+			{
+				{7DD95801-9882-11CF-9FA9-00AA006C42C4} = s 'Safe for scripting'
+				{7DD95802-9882-11CF-9FA9-00AA006C42C4} = s 'Safe for initialization'
+
+			}
+		}
+	}
+}

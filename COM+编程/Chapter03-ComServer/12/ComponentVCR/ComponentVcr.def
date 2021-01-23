@@ -1,0 +1,9 @@
+; Module-Definition File ComponentVcr.Def
+
+LIBRARY      "ComponentVcr.DLL"
+
+EXPORTS
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllCanUnloadNow     PRIVATE

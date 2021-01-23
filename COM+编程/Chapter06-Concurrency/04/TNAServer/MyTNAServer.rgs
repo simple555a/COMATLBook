@@ -1,0 +1,23 @@
+HKCR
+{
+	TNAServer.MyTNAServer.1 = s 'MyTNAServer Class'
+	{
+		CLSID = s '{1AA68EA4-8A78-4A49-9159-94B0740FEE4E}'
+	}
+	TNAServer.MyTNAServer = s 'MyTNAServer Class'
+	{
+		CLSID = s '{1AA68EA4-8A78-4A49-9159-94B0740FEE4E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1AA68EA4-8A78-4A49-9159-94B0740FEE4E} = s 'MyTNAServer Class'
+		{
+			ProgID = s 'TNAServer.MyTNAServer.1'
+			VersionIndependentProgID = s 'TNAServer.MyTNAServer'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'neutral'
+			}
+		}
+	}
+}

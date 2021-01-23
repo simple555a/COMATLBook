@@ -1,0 +1,62 @@
+// TextFileDB.idl : IDL source for TextFileDB.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TextFileDB.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(89D0CF05-B22D-400E-9823-05EC7349E084),
+		dual,
+		helpstring("IMyFileDB Interface"),
+		pointer_default(unique)
+	]
+	interface IMyFileDB : IDispatch
+	{
+		[id(1), helpstring("method Open")] HRESULT Open([in] BSTR bsFilePath);
+		[id(2), helpstring("method GetBalance")] HRESULT GetBalance([in] BSTR bsClient, [out, retval] long* plBalance);
+		[id(3), helpstring("method UpdateBalance")] HRESULT UpdateBalance([in] BSTR bsClient, [in] long lNewBalance);
+	};
+	
+	[
+		object,
+		uuid(A6E9FDC3-BA2F-4E58-B620-C3524CA5FE09),
+		helpstring("IMyFileDBCompensator Interface"),
+		pointer_default(unique)
+	]
+	interface IMyFileDBCompensator : IUnknown
+	{
+	};
+
+[
+	uuid(A488996C-EED8-40D2-ABB3-438771CD81C6),
+	version(1.0),
+	helpstring("TextFileDB 1.0 Type Library")
+]
+library TEXTFILEDBLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(7F99F9F5-37F1-43D2-B4D1-46EDD44E440C),
+		helpstring("MyFileDB Class")
+	]
+	coclass MyFileDB
+	{
+		[default] interface IMyFileDB;
+	};
+	
+	[
+		uuid(C2230D95-43A9-46CF-B6ED-135CA0BD5C5C),
+		helpstring("MyFileDBCompensator Class")
+	]
+	coclass MyFileDBCompensator
+	{
+		[default] interface IMyFileDBCompensator;
+	};
+};

@@ -1,0 +1,39 @@
+// TestD.idl : IDL source for TestD.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestD.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(FE50224D-13BA-4193-B761-813EEAF9EC27),
+		dual,
+		helpstring("IMyTestD Interface"),
+		pointer_default(unique)
+	]
+	interface IMyTestD : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] HRESULT DoIt();
+	};
+
+[
+	uuid(D3D63CB7-6C0B-47D6-A2BB-47180720BC1F),
+	version(1.0),
+	helpstring("TestD 1.0 Type Library")
+]
+library TESTDLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(81D29D8E-D44F-4830-BE40-B90A6C24E10A),
+		helpstring("MyTestD Class")
+	]
+	coclass MyTestD
+	{
+		[default] interface IMyTestD;
+	};
+};

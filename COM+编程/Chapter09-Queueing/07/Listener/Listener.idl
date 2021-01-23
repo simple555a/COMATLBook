@@ -1,0 +1,42 @@
+// Listener.idl : IDL source for Listener.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Listener.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(B060103C-4F04-4D6C-816B-71D2C8B779F9),
+		dual,
+		helpstring("IMyListener Interface"),
+		pointer_default(unique)
+	]
+	interface IMyListener : IDispatch
+	{
+		[id(1), helpstring("method Listen")] HRESULT Listen();
+		[id(2), helpstring("method Send")] HRESULT Send();
+	};
+
+[
+	uuid(2ADF97F9-47F0-428D-B319-626CF9754937),
+	version(1.0),
+	helpstring("Listener 1.0 Type Library")
+]
+library LISTENERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(E99A63C7-36A1-41DD-BF3E-E8D493995C31),
+		helpstring("MyListener Class")
+	]
+	coclass MyListener
+	{
+		[default] interface IMyListener;
+	};
+};

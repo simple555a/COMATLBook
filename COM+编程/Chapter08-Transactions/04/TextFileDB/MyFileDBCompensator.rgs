@@ -1,0 +1,23 @@
+HKCR
+{
+	TextFileDB.MyFileDBCompensator.1 = s 'MyFileDBCompensator Class'
+	{
+		CLSID = s '{C2230D95-43A9-46CF-B6ED-135CA0BD5C5C}'
+	}
+	TextFileDB.MyFileDBCompensator = s 'MyFileDBCompensator Class'
+	{
+		CLSID = s '{C2230D95-43A9-46CF-B6ED-135CA0BD5C5C}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C2230D95-43A9-46CF-B6ED-135CA0BD5C5C} = s 'MyFileDBCompensator Class'
+		{
+			ProgID = s 'TextFileDB.MyFileDBCompensator.1'
+			VersionIndependentProgID = s 'TextFileDB.MyFileDBCompensator'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

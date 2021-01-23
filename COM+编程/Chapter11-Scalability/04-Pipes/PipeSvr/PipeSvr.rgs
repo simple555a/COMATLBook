@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{50D3D066-F828-4C03-B668-61D96F270A26} = s 'PipeSvr'
+		'PipeSvr.EXE'
+		{
+			val AppID = s {50D3D066-F828-4C03-B668-61D96F270A26}
+		}
+	}
+}

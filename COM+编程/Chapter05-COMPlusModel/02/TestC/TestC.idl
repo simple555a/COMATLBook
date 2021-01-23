@@ -1,0 +1,41 @@
+// TestC.idl : IDL source for TestC.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestC.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(2F8938CA-D3A7-4AA8-8144-7FD984DC46D4),
+		dual,
+		helpstring("IMyTestC Interface"),
+		pointer_default(unique)
+	]
+	interface IMyTestC : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] HRESULT DoIt([out, retval] BSTR* pbVal);
+	};
+
+[
+	uuid(EBEFA01D-5C9C-40E3-A70E-FAD09AE146D8),
+	version(1.0),
+	helpstring("TestC 1.0 Type Library")
+]
+library TESTCLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(1EFB9BFE-3361-4206-B8FE-47BAF3835704),
+		helpstring("MyTestC Class")
+	]
+	coclass MyTestC
+	{
+		[default] interface IMyTestC;
+	};
+};

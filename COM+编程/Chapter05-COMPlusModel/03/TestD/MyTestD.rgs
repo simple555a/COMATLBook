@@ -1,0 +1,26 @@
+HKCR
+{
+	TestD.MyTestD.1 = s 'MyTestD Class'
+	{
+		CLSID = s '{81D29D8E-D44F-4830-BE40-B90A6C24E10A}'
+	}
+	TestD.MyTestD = s 'MyTestD Class'
+	{
+		CLSID = s '{81D29D8E-D44F-4830-BE40-B90A6C24E10A}'
+		CurVer = s 'TestD.MyTestD.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {81D29D8E-D44F-4830-BE40-B90A6C24E10A} = s 'MyTestD Class'
+		{
+			ProgID = s 'TestD.MyTestD.1'
+			VersionIndependentProgID = s 'TestD.MyTestD'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			'TypeLib' = s '{D3D63CB7-6C0B-47D6-A2BB-47180720BC1F}'
+		}
+	}
+}

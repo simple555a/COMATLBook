@@ -1,0 +1,23 @@
+HKCR
+{
+	ActivityTest.MyTest.1 = s 'MyTest Class'
+	{
+		CLSID = s '{132CBDFA-F567-409B-8CFC-0EF6A9D81827}'
+	}
+	ActivityTest.MyTest = s 'MyTest Class'
+	{
+		CLSID = s '{132CBDFA-F567-409B-8CFC-0EF6A9D81827}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {132CBDFA-F567-409B-8CFC-0EF6A9D81827} = s 'MyTest Class'
+		{
+			ProgID = s 'ActivityTest.MyTest.1'
+			VersionIndependentProgID = s 'ActivityTest.MyTest'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'free'
+			}
+		}
+	}
+}

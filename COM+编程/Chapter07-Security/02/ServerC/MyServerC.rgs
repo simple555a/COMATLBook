@@ -1,0 +1,23 @@
+HKCR
+{
+	ServerC.MyServerC.1 = s 'MyServerC Class'
+	{
+		CLSID = s '{396221D7-FF96-454F-8316-F80915B38906}'
+	}
+	ServerC.MyServerC = s 'MyServerC Class'
+	{
+		CLSID = s '{396221D7-FF96-454F-8316-F80915B38906}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {396221D7-FF96-454F-8316-F80915B38906} = s 'MyServerC Class'
+		{
+			ProgID = s 'ServerC.MyServerC.1'
+			VersionIndependentProgID = s 'ServerC.MyServerC'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,43 @@
+// AccountMgmt.idl : IDL source for AccountMgmt.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AccountMgmt.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+#include <mtxattr.h>
+	
+	[
+		object,
+		uuid(73A63782-3AE5-44B8-8C6F-E36CFC8D9A18),
+		dual,
+		helpstring("IAccountMgr Interface"),
+		pointer_default(unique)
+	]
+	interface IAccountMgr : IDispatch
+	{
+		[id(1), helpstring("method Debit")] HRESULT Debit([in] BSTR bsClient, [in] long lAmount);
+	};
+
+[
+	uuid(C9CF273D-EDED-4BD1-9DE6-559559BF001D),
+	version(1.0),
+	helpstring("AccountMgmt 1.0 Type Library")
+]
+library ACCOUNTMGMTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(0AC21FA4-DB2A-474F-A501-F9C9A062A63E),
+		helpstring("AccountMgr Class"),
+		TRANSACTION_REQUIRED
+	]
+	coclass AccountMgr
+	{
+		[default] interface IAccountMgr;
+	};
+};

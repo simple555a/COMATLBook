@@ -1,0 +1,23 @@
+HKCR
+{
+	MyVCR.Vcr.1 = s 'Vcr Class'
+	{
+		CLSID = s '{471B8989-D258-4211-8E59-6CC8E1353A46}'
+	}
+	MyVCR.Vcr = s 'Vcr Class'
+	{
+		CLSID = s '{471B8989-D258-4211-8E59-6CC8E1353A46}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {471B8989-D258-4211-8E59-6CC8E1353A46} = s 'Vcr Class'
+		{
+			ProgID = s 'MyVCR.Vcr.1'
+			VersionIndependentProgID = s 'MyVCR.Vcr'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

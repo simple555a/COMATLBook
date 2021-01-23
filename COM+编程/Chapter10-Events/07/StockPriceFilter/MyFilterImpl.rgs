@@ -1,0 +1,23 @@
+HKCR
+{
+	StockPriceFilter.MyFilterImpl.1 = s 'MyFilterImpl Class'
+	{
+		CLSID = s '{7F90EF4A-549C-4D55-8F00-C274456B1075}'
+	}
+	StockPriceFilter.MyFilterImpl = s 'MyFilterImpl Class'
+	{
+		CLSID = s '{7F90EF4A-549C-4D55-8F00-C274456B1075}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7F90EF4A-549C-4D55-8F00-C274456B1075} = s 'MyFilterImpl Class'
+		{
+			ProgID = s 'StockPriceFilter.MyFilterImpl.1'
+			VersionIndependentProgID = s 'StockPriceFilter.MyFilterImpl'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

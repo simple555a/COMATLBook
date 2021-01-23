@@ -1,0 +1,23 @@
+HKCR
+{
+	AccountMgmt.AccountMgr.1 = s 'AccountMgr Class'
+	{
+		CLSID = s '{0AC21FA4-DB2A-474F-A501-F9C9A062A63E}'
+	}
+	AccountMgmt.AccountMgr = s 'AccountMgr Class'
+	{
+		CLSID = s '{0AC21FA4-DB2A-474F-A501-F9C9A062A63E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0AC21FA4-DB2A-474F-A501-F9C9A062A63E} = s 'AccountMgr Class'
+		{
+			ProgID = s 'AccountMgmt.AccountMgr.1'
+			VersionIndependentProgID = s 'AccountMgmt.AccountMgr'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

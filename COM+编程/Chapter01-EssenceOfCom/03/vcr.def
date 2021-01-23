@@ -1,0 +1,10 @@
+; File VCR.DEF
+
+LIBRARY      VCR.DLL
+
+EXPORTS
+	?GetSignalValue@IVideo@@QAEJXZ     
+	??0IVideo@@QAE@XZ
+	??1IVideo@@QAE@XZ
+
+

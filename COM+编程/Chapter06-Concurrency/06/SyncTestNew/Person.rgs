@@ -1,0 +1,23 @@
+HKCR
+{
+	SyncTestNew.Person.1 = s 'Person Class'
+	{
+		CLSID = s '{D68FE839-C09E-4EF6-810F-2A00B37003A7}'
+	}
+	SyncTestNew.Person = s 'Person Class'
+	{
+		CLSID = s '{D68FE839-C09E-4EF6-810F-2A00B37003A7}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D68FE839-C09E-4EF6-810F-2A00B37003A7} = s 'Person Class'
+		{
+			ProgID = s 'SyncTestNew.Person.1'
+			VersionIndependentProgID = s 'SyncTestNew.Person'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

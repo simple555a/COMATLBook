@@ -1,0 +1,21 @@
+HKCR
+{
+	AsyncServer.MySum.1 = s 'MySum Class'
+	{
+		CLSID = s '{7E2B473B-147A-4AE1-A236-B086F7703DD5}'
+	}
+	AsyncServer.MySum = s 'MySum Class'
+	{
+		CLSID = s '{7E2B473B-147A-4AE1-A236-B086F7703DD5}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7E2B473B-147A-4AE1-A236-B086F7703DD5} = s 'MySum Class'
+		{
+			ProgID = s 'AsyncServer.MySum.1'
+			VersionIndependentProgID = s 'AsyncServer.MySum'
+			val AppID = s '{D50A2A95-2DF7-4700-ABE6-AEB760E2479A}'
+			LocalServer32 = s '%Module%'
+		}
+	}
+}

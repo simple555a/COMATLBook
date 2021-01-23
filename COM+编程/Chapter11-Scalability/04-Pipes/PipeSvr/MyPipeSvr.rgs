@@ -1,0 +1,21 @@
+HKCR
+{
+	PipeSvr.MyPipeSvr.1 = s 'MyPipeSvr Class'
+	{
+		CLSID = s '{BE324203-4D58-45C6-9680-FF17F984F3FD}'
+	}
+	PipeSvr.MyPipeSvr = s 'MyPipeSvr Class'
+	{
+		CLSID = s '{BE324203-4D58-45C6-9680-FF17F984F3FD}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {BE324203-4D58-45C6-9680-FF17F984F3FD} = s 'MyPipeSvr Class'
+		{
+			ProgID = s 'PipeSvr.MyPipeSvr.1'
+			VersionIndependentProgID = s 'PipeSvr.MyPipeSvr'
+			val AppID = s '{50D3D066-F828-4C03-B668-61D96F270A26}'
+			LocalServer32 = s '%Module%'
+		}
+	}
+}

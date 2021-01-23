@@ -1,0 +1,5 @@
+// File MyVcr.rc
+
+#include "Resource.h"
+
+IDR_VCR        REGISTRY DISCARDABLE    "Vcr.rgs"

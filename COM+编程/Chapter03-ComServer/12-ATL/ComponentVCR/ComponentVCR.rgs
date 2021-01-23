@@ -1,0 +1,23 @@
+HKCR
+{
+	ComponentVCR.ComponentVCR.1 = s 'ComponentVCR Class'
+	{
+		CLSID = s '{7A197921-045A-4800-8531-F21C981BC831}'
+	}
+	ComponentVCR.ComponentVCR = s 'ComponentVCR Class'
+	{
+		CLSID = s '{7A197921-045A-4800-8531-F21C981BC831}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7A197921-045A-4800-8531-F21C981BC831} = s 'ComponentVCR Class'
+		{
+			ProgID = s 'ComponentVCR.ComponentVCR.1'
+			VersionIndependentProgID = s 'ComponentVCR.ComponentVCR'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

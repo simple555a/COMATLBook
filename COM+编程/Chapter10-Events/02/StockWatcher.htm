@@ -1,0 +1,31 @@
+<HTML>
+	<HEAD>
+		<TITLE>Stock Watcher</TITLE>
+		<OBJECT VIEWASTEXT ID=StockWatcherObject CLASSID="clsid:A5AC21C6-2376-420F-8080-05C84A73C4F7"></OBJECT>
+		<SCRIPT LANGUAGE=vbscript>
+		<!--
+
+			Sub BtnEnable_onclick
+				call StockWatcherObject.Enable
+			End Sub
+
+			Sub BtnDisable_onclick
+				call StockWatcherObject.Disable
+			End Sub
+
+			Sub StockWatcherObject_StockUpdate(ByVal symbol, ByVal price)
+				displayString = symbol & " "  & price
+				MyDisplayLine.innerText = displayString
+			End Sub
+
+		-->
+		</SCRIPT>
+	</HEAD>
+
+	<BODY>
+		<H2>Stock Watcher</H2><BR/>
+		&nbsp<INPUT TYPE=BUTTON VALUE="Enable" ID="BtnEnable">&nbsp;&nbsp;
+		<SPAN ID=MyDisplayLine></SPAN><BR/><BR/>
+		&nbsp<INPUT TYPE=BUTTON VALUE="Disable" ID="BtnDisable">
+	</BODY>
+</HTML>

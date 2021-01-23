@@ -1,0 +1,36 @@
+<HTML>
+	<HEAD>
+		<TITLE>Receive MSMQ messages</TITLE>
+		<OBJECT VIEWASTEXT ID=MyRequestEvent CLASSID="clsid:D7D6E07A-DCCD-11D0-AA4B-0060970DEBAE"></OBJECT>
+		<SCRIPT LANGUAGE=vbscript>
+			<!--
+			option explicit
+			Dim MyQueueInfo, MyRequestQueue
+
+			Sub MyStartButton_onclick
+				MyStartButton.disabled = true ' The btn can be clicked just once
+				set MyQueueInfo = CreateObject("MSMQ.MSMQQueueInfo")
+				MyQueueInfo.PathName = ".\MyPubQueue"
+				Set MyRequestQueue = MyQueueInfo.Open(1, 0)
+				MyRequestQueue.EnableNotification MyRequestEvent
+				MyDisplayLine.innerText = "Waiting for messages..."
+			End Sub
+
+			Sub MyRequestEvent_Arrived(ByVal queue, ByVal Cursor)
+				Dim MyMsg
+				Set MyMsg = queue.Receive(0)
+				if Not (MyMsg is Nothing) then
+					MyDisplayLine.innerText = MyMsg.Body
+				end if
+				queue.EnableNotification MyRequestEvent
+			End Sub
+			-->
+		</SCRIPT>
+	</HEAD>
+
+	<BODY>
+		<H2>Receive MSMQ messages</H2>
+		<INPUT TYPE="button" VALUE="Start" ID=MyStartButton><BR/><BR/>
+		<DIV ID=MyDisplayLine></DIV>
+	</BODY>
+</HTML>

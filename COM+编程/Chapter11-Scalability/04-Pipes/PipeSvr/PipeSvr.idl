@@ -1,0 +1,40 @@
+// PipeSvr.idl : IDL source for PipeSvr.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (PipeSvr.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(4964BF91-8BAE-494F-A528-CEBB94B6ECAE),
+		helpstring("IMyPipeSvr Interface"),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface IMyPipeSvr : IUnknown
+	{
+	};
+
+[
+	uuid(75579770-7BE0-42D5-8696-E5A9233111D9),
+	version(1.0),
+	helpstring("PipeSvr 1.0 Type Library")
+]
+library PIPESVRLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(BE324203-4D58-45C6-9680-FF17F984F3FD),
+		helpstring("MyPipeSvr Class")
+	]
+	coclass MyPipeSvr
+	{
+		[default] interface IMyPipeSvr;
+	};
+};

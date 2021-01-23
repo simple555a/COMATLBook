@@ -1,0 +1,21 @@
+HKCR
+{
+	ExploreIDL.MyExplore.1 = s 'MyExplore Class'
+	{
+		CLSID = s '{2B930580-0C8D-11D3-9B66-0080C8E11F14}'
+	}
+	ExploreIDL.MyExplore = s 'MyExplore Class'
+	{
+		CLSID = s '{2B930580-0C8D-11D3-9B66-0080C8E11F14}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {2B930580-0C8D-11D3-9B66-0080C8E11F14} = s 'MyExplore Class'
+		{
+			ProgID = s 'ExploreIDL.MyExplore.1'
+			VersionIndependentProgID = s 'ExploreIDL.MyExplore'
+			val AppID = s '{2B930574-0C8D-11D3-9B66-0080C8E11F14}'
+			LocalServer32 = s '%Module%'
+		}
+	}
+}

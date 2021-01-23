@@ -1,0 +1,42 @@
+// MySubscriber.idl : IDL source for MySubscriber.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MySubscriber.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "StockPrice.idl";
+	
+	[
+		object,
+		uuid(FF270B25-ECB9-4A78-8B8B-55CE10A1627B),
+		helpstring("IMyStockEventSubscriber Interface"),
+		pointer_default(unique)
+	]
+	interface IMyStockEventSubscriber : IUnknown
+	{
+	};
+
+[
+	uuid(18369476-0340-4151-89AA-724BFB78BEB9),
+	version(1.0),
+	helpstring("MySubscriber 1.0 Type Library")
+]
+library MYSUBSCRIBERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	importlib("StockPrice.tlb");
+
+	
+	[
+		uuid(067EC5B8-1CE3-4E1C-9317-6E4B342A920E),
+		helpstring("MyStockEventSubscriber Class")
+	]
+	coclass MyStockEventSubscriber
+	{
+		[default] interface IMyStockEventSubscriber;
+		interface IMyStockPriceEvent;
+	};
+};

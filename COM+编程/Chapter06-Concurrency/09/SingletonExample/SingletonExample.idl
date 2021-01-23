@@ -1,0 +1,42 @@
+// SingletonExample.idl : IDL source for SingletonExample.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SingletonExample.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(4609CCBE-C58C-4913-B657-5DF93495A5B8),
+		dual,
+		helpstring("IMySingleton Interface"),
+		pointer_default(unique)
+	]
+	interface IMySingleton : IDispatch
+	{
+		[propget, id(1), helpstring("property LicenseKey")] HRESULT LicenseKey([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property LicenseKey")] HRESULT LicenseKey([in] BSTR newVal);
+	};
+
+[
+	uuid(B2AC6E5D-160C-454A-934C-6D35F796FCC7),
+	version(1.0),
+	helpstring("SingletonExample 1.0 Type Library")
+]
+library SINGLETONEXAMPLELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(0164B179-0B23-4C23-9B50-E91114F6DFD2),
+		helpstring("MySingleton Class")
+	]
+	coclass MySingleton
+	{
+		[default] interface IMySingleton;
+	};
+};

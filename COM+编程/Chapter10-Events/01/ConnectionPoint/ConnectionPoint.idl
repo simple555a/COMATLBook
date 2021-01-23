@@ -1,0 +1,54 @@
+// ConnectionPoint.idl : IDL source for ConnectionPoint.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ConnectionPoint.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(827A81E1-9909-4958-9020-8DE9B24FDCE5),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface IStockPriceUpdate : IUnknown
+	{
+		[id(1)] HRESULT NewQuote([in] BSTR bsSymbol, [in] double dPrice);
+	};
+
+	
+	[
+		object,
+		uuid(9E5A90E3-48CE-4F6A-9FD8-3D1DE454C136),
+		dual,
+		helpstring("IMyBroker Interface"),
+		pointer_default(unique)
+	]
+	interface IMyBroker : IDispatch
+	{
+		[id(1), helpstring("method Enable")] HRESULT Enable();
+		[id(2), helpstring("method Disable")] HRESULT Disable();
+	};
+
+[
+	uuid(F979CFFB-C9CA-4407-BFC7-2617B2F118FE),
+	version(1.0),
+	helpstring("ConnectionPoint 1.0 Type Library")
+]
+library CONNECTIONPOINTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+	[
+		uuid(47DFDAA2-A987-46BD-887E-1661C3F0F652),
+		helpstring("MyBroker Class")
+	]
+	coclass MyBroker
+	{
+		[default] interface IMyBroker;
+		[default, source] interface IStockPriceUpdate;
+	};
+};

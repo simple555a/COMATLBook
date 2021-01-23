@@ -1,0 +1,41 @@
+// TestA.idl : IDL source for TestA.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestA.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(FC726FA9-1F8C-46C5-9E26-E2DA9052F02F),
+		helpstring("IMyTestA Interface"),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface IMyTestA : IUnknown
+	{
+		[helpstring("method DoIt")] HRESULT DoIt();
+	};
+
+[
+	uuid(D707A604-842E-458D-9EC9-AED8704FB4E7),
+	version(1.0),
+	helpstring("TestA 1.0 Type Library")
+]
+library TESTALib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(0ADDCD1C-AE59-430B-9A52-83924779DA37),
+		helpstring("MyTestA Class")
+	]
+	coclass MyTestA
+	{
+		[default] interface IMyTestA;
+	};
+};

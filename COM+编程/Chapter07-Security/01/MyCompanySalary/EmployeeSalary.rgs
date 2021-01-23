@@ -1,0 +1,23 @@
+HKCR
+{
+	MyCompanySalary.EmployeeSalary.1 = s 'EmployeeSalary Class'
+	{
+		CLSID = s '{0D30370A-3D41-4C78-92DA-0EB66A6EB08E}'
+	}
+	MyCompanySalary.EmployeeSalary = s 'EmployeeSalary Class'
+	{
+		CLSID = s '{0D30370A-3D41-4C78-92DA-0EB66A6EB08E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0D30370A-3D41-4C78-92DA-0EB66A6EB08E} = s 'EmployeeSalary Class'
+		{
+			ProgID = s 'MyCompanySalary.EmployeeSalary.1'
+			VersionIndependentProgID = s 'MyCompanySalary.EmployeeSalary'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

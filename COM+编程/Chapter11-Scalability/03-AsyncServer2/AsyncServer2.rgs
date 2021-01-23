@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{B0CED06B-CD64-4BAE-9DE6-E618F482D741} = s 'AsyncServer2'
+		'AsyncServer2.EXE'
+		{
+			val AppID = s {B0CED06B-CD64-4BAE-9DE6-E618F482D741}
+		}
+	}
+}

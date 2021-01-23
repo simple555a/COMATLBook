@@ -1,0 +1,8 @@
+; File VCR.DEF
+
+LIBRARY      VCR.DLL
+
+EXPORTS
+	CreateVCR
+
+

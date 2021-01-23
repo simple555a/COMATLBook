@@ -1,0 +1,40 @@
+// ComponentVCR.idl : IDL source for ComponentVCR.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ComponentVCR.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(39987D63-C917-4918-BE9E-30931A13DBA1),
+		helpstring("IComponentVideo Interface"),
+		pointer_default(unique)
+	]
+	interface IComponentVideo : IUnknown
+	{
+		[helpstring("method GetCVideoSignalValue")] HRESULT GetCVideoSignalValue([out, retval] long* val);
+	};
+
+[
+	uuid(2C4FA916-65F6-489C-9028-7297B6EF758D),
+	version(1.0),
+	helpstring("ComponentVCR 1.0 Type Library")
+]
+library COMPONENTVCRLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(7A197921-045A-4800-8531-F21C981BC831),
+		helpstring("ComponentVCR Class")
+	]
+	coclass ComponentVCR
+	{
+		[default] interface IComponentVideo;
+	};
+};

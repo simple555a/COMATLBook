@@ -1,0 +1,23 @@
+HKCR
+{
+	TestObjectConstruct.MyServer.1 = s 'MyServer Class'
+	{
+		CLSID = s '{EEF222FE-B09B-4E31-A618-B48E66ABC241}'
+	}
+	TestObjectConstruct.MyServer = s 'MyServer Class'
+	{
+		CLSID = s '{EEF222FE-B09B-4E31-A618-B48E66ABC241}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {EEF222FE-B09B-4E31-A618-B48E66ABC241} = s 'MyServer Class'
+		{
+			ProgID = s 'TestObjectConstruct.MyServer.1'
+			VersionIndependentProgID = s 'TestObjectConstruct.MyServer'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

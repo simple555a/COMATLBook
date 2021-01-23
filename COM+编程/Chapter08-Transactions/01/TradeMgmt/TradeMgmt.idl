@@ -1,0 +1,41 @@
+// TradeMgmt.idl : IDL source for TradeMgmt.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TradeMgmt.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(E494DFDF-1A97-4003-8106-5CCA512CC791),
+		dual,
+		helpstring("ITradeMgr Interface"),
+		pointer_default(unique)
+	]
+	interface ITradeMgr : IDispatch
+	{
+		[id(1), helpstring("method BuyStocks")] HRESULT BuyStocks([in] BSTR bsClient, [in] BSTR bsSymbol, [in] long lShares);
+	};
+
+[
+	uuid(CC2571AF-B231-49D3-952C-0C13BCF750D9),
+	version(1.0),
+	helpstring("TradeMgmt 1.0 Type Library")
+]
+library TRADEMGMTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(D19ABFAD-8266-4066-82AB-C1BD6C66B324),
+		helpstring("TradeMgr Class")
+	]
+	coclass TradeMgr
+	{
+		[default] interface ITradeMgr;
+	};
+};

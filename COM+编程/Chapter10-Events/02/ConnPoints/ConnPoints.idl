@@ -1,0 +1,56 @@
+// ConnPoints.idl : IDL source for ConnPoints.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ConnPoints.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(8FAD7E09-1091-4CE3-AABA-959BDBD3C68D),
+		dual,
+		helpstring("IMyStockWatcher Interface"),
+		pointer_default(unique)
+	]
+	interface IMyStockWatcher : IDispatch
+	{
+		[id(1), helpstring("method Enable")] HRESULT Enable();
+		[id(2), helpstring("method Disable")] HRESULT Disable();
+	};
+
+
+[
+	uuid(68FF47A4-325B-460A-BA2C-FDF03A373AAD),
+	version(1.0),
+	helpstring("ConnPoints 1.0 Type Library")
+]
+library CONNPOINTSLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(8FAD7E0B-1091-4CE3-AABA-959BDBD3C68D),
+		helpstring("DIMyStockWatcherSink Interface"),
+		nonextensible
+	]
+	dispinterface DIMyStockWatcherSink
+	{
+		properties:
+		methods:
+		[id(1)] void StockUpdate([in] BSTR bsSymbol, [in] long lPrice);
+	};
+
+	[
+		uuid(A5AC21C6-2376-420F-8080-05C84A73C4F7),
+		helpstring("MyStockWatcher Class")
+	]
+	coclass MyStockWatcher
+	{
+		[default] interface IMyStockWatcher;
+		[default, source] dispinterface DIMyStockWatcherSink;
+	};
+};
+

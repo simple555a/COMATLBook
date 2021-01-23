@@ -1,0 +1,42 @@
+// MyCompanySalary.idl : IDL source for MyCompanySalary.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MyCompanySalary.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(0583EB7A-164F-428E-8D6F-D282283B30A0),
+		dual,
+		helpstring("IEmployeeSalary Interface"),
+		pointer_default(unique)
+	]
+	interface IEmployeeSalary : IDispatch
+	{
+		HRESULT GetSalary([in] BSTR bsEmployeeName, [out, retval] long *pVal);
+		HRESULT UpdateSalary([in] BSTR bsEmployeeName, [in] long newVal);
+	};
+
+[
+	uuid(D59E8AAC-856C-417E-8DBD-A2791B0D2F76),
+	version(1.0),
+	helpstring("MyCompanySalary 1.0 Type Library")
+]
+library MYCOMPANYSALARYLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(0D30370A-3D41-4C78-92DA-0EB66A6EB08E),
+		helpstring("EmployeeSalary Class")
+	]
+	coclass EmployeeSalary
+	{
+		[default] interface IEmployeeSalary;
+	};
+};

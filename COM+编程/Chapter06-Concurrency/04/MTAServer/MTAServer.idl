@@ -1,0 +1,41 @@
+// MTAServer.idl : IDL source for MTAServer.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MTAServer.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(926C40AA-62D1-46DF-BC80-71ADFCFC5F6D),
+		helpstring("IMyMTAServer Interface"),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface IMyMTAServer : IUnknown
+	{
+		[helpstring("method DoIt")] HRESULT DoIt();
+	};
+
+[
+	uuid(584C0D50-8725-49FE-8556-896A57AFFEA9),
+	version(1.0),
+	helpstring("MTAServer 1.0 Type Library")
+]
+library MTASERVERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(AA50CDB4-298F-40B3-B012-2261926D305A),
+		helpstring("MyMTAServer Class")
+	]
+	coclass MyMTAServer
+	{
+		[default] interface IMyMTAServer;
+	};
+};

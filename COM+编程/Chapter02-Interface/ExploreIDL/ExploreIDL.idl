@@ -1,0 +1,150 @@
+// ExploreIDL.idl : IDL source for ExploreIDL.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ExploreIDL.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+typedef 
+[
+	v1_enum,
+	uuid(2B930581-0C8D-11D3-9B66-0080C8E11F14),
+	helpstring("This is my color enumeration")
+] enum {
+	[helpstring("This is my red")] MYRED   = 0x0001, 
+	[helpstring("This is my red")] MYGREEN = 0x0002, 	
+	[helpstring("This is my red")] MYBLUE  = 0x0004
+}MYCOLOR;
+
+typedef struct tagMYPOINT
+{
+	long lX;
+	long lY;
+}MYPOINT;
+
+typedef struct tagCIRCULARBUF
+{
+	long lVar;
+	[unique] struct tagCIRCULARBUF* pNext;
+} CIRCULARBUF;
+
+typedef struct tagMYITEM
+{
+	long lVal;
+	[ref] long* plVal;
+} MYITEM;
+
+typedef enum tagMYVALUETYPE {
+	MYLONG = 1,
+	MYFLOAT = 2
+}MYVALUETYPE;
+
+
+typedef union tagMYNUMBER {
+	[case(MYLONG)] long l;
+	[case(MYFLOAT)] float f;
+}MYNUMBER;
+
+typedef struct tagMYENUMBER {
+	MYVALUETYPE type;
+
+	[switch_is(type)] union {
+		[case(MYLONG)] long l;
+		[case(MYFLOAT)] float f;
+	};
+}MYENUMBER;
+
+typedef struct tagMYLONGLIST {
+	long lVal;
+	[unique] struct tagMYLONGLIST* pNext;
+}MYLONGLIST;
+
+typedef struct tagMYCIRCULARLIST {
+	long lVal;
+	[ptr] struct tagMYCIRCULARLIST* pNext;
+}MYCIRCULARLIST;
+
+typedef struct tagMYLEADER {
+	BSTR bsFirstName;
+	BSTR bsLastName;
+	VARIANT vTitle;
+}MYLEADER;
+
+typedef struct tagMYLEADERS {
+	long lElements;
+	[size_is(lElements)] MYLEADER* pData;
+}MYLEADERS;
+	
+
+		
+	[
+		object,
+		uuid(2B93057F-0C8D-11D3-9B66-0080C8E11F14),
+		helpstring("IMyExplore Interface")
+		// pointer_default(unique)
+	]
+	interface IMyExplore : IUnknown
+	{
+		[helpstring("Obtain a random value")] 
+		HRESULT GetRandomValue([out, retval] long* pVal);
+
+		[helpstring("Demo parameter directions")] 
+		HRESULT DirectionDemo(
+			[in] long val1, 
+			[out] long* pVal2, 
+			[in, out] long* pVal3,  
+			[out] long* pVal4, 
+			[in] long val5);
+
+		[helpstring("Demo string param")] 
+		HRESULT StringParam([in, string] OLECHAR* pwszName);
+		[helpstring("method RevisedStringParam")] HRESULT RevisedStringParam([in] BSTR bstrVal);
+		[helpstring("method GetString")] HRESULT GetString([out] BSTR* pVal);
+		[helpstring("method GetEnum")] HRESULT GetEnum([out] MYCOLOR* pVal);
+		[helpstring("method AliasDemo")] HRESULT AliasDemo([out] long* val1, [out] long* val2, [out] long* val3);
+		[helpstring("method AliasDemoInParam")] HRESULT AliasDemoInParam([in, ref] long* pVal1, [in, out, unique] long* pVal2);
+		[helpstring("method SendCircularBuf")] HRESULT SendCircularBuf([in, ptr] CIRCULARBUF* pBuf);
+		[helpstring("method EmbeddedDemo")] HRESULT EmbeddedDemo([in] MYITEM* val);
+		[helpstring("method ArrayDemo")] HRESULT ArrayDemo([in] long nCount, [in, size_is(nCount), unique] long* pVal);
+		[helpstring("method SimpleStruct")] HRESULT StructDemo([out, retval] MYPOINT* pVal);
+		[helpstring("method SimpleArrayDemoIn")] HRESULT SimpleArrayDemoIn([in] long alVal[100]);
+		[helpstring("method SimpleArrayDemoOut")] HRESULT SimpleArrayDemoOut([out, retval] long alVal[100]);
+		[helpstring("method SimpleUnionIn")] HRESULT SimpleUnionIn([in] MYVALUETYPE type, [in, switch_is(type)] MYNUMBER num);
+		[helpstring("method EncapsulatedUnionIn")] HRESULT EncapsulatedUnionIn([in] MYENUMBER num);
+		[helpstring("method ConformantArrayIn")] HRESULT ConformantArrayIn([in] long lCount, [in, size_is(lCount)] long* aVal);
+		[helpstring("method ConformantArrayOut")] HRESULT ConformantArrayOut([in] long lCount, [out, size_is(lCount)] long alVal[]);
+		[helpstring("method ConformantArrayIn2")] HRESULT ConformantArrayIn2([in] long lCount, [in, max_is(lCount)] long* aVal);
+		[helpstring("method GetGrades1")] HRESULT GetGrades1([in] long lSize, [out, size_is(lSize)] long alGrades[]);
+		[helpstring("method GetGrades2")] HRESULT GetGrades2([in] long lSize, [out] long* plActual, [out, size_is(lSize)] long alGrades[]);
+		[helpstring("method GetGrades3")] HRESULT GetGrades3([in] long lSize, [out] long* plActual, [out, size_is(lSize), length_is(*plActual)] long alGrades[]);
+		[helpstring("method GetGrades4")] HRESULT GetGrades4([in] long lSize, [out] long* plActual, [out] long* plFirst, [out, size_is(lSize), length_is(*plActual), first_is(*plFirst)] long alGrades[]);
+		[helpstring("method GetGrades5")] HRESULT GetGrades5([in] long lSize, [in, out] long* plActual, [in, out] long* plFirst, [in, out, size_is(lSize), length_is(*plActual), first_is(*plFirst)] long alGrades[]);
+		[helpstring("method GetGrades6")] HRESULT GetGrades6([out] long* plCount, [out, size_is(,*plCount)] long** palVal);
+		[helpstring("method Pointer1")] HRESULT MyLinkList([in, unique] MYLONGLIST* pList);
+		[helpstring("method MyCircularList")] HRESULT MyCircularList([in, ptr] MYCIRCULARLIST* pList);
+		[helpstring("method GetMyData")] HRESULT GetMyLeaders([out] MYLEADERS* pDataArray);
+
+	};
+
+[
+	uuid(2B930573-0C8D-11D3-9B66-0080C8E11F14),
+	version(1.0),
+	helpstring("ExploreIDL 1.0 Type Library")
+]
+library EXPLOREIDLLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(2B930580-0C8D-11D3-9B66-0080C8E11F14),
+		helpstring("MyExplore Class")
+	]
+	coclass MyExplore
+	{
+		[default] interface IMyExplore;
+	};
+};

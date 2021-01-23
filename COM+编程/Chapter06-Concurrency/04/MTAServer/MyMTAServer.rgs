@@ -1,0 +1,23 @@
+HKCR
+{
+	MTAServer.MyMTAServer.1 = s 'MyMTAServer Class'
+	{
+		CLSID = s '{AA50CDB4-298F-40B3-B012-2261926D305A}'
+	}
+	MTAServer.MyMTAServer = s 'MyMTAServer Class'
+	{
+		CLSID = s '{AA50CDB4-298F-40B3-B012-2261926D305A}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {AA50CDB4-298F-40B3-B012-2261926D305A} = s 'MyMTAServer Class'
+		{
+			ProgID = s 'MTAServer.MyMTAServer.1'
+			VersionIndependentProgID = s 'MTAServer.MyMTAServer'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'free'
+			}
+		}
+	}
+}

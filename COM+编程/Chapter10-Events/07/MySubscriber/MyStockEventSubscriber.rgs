@@ -1,0 +1,23 @@
+HKCR
+{
+	MySubscriber.MyStockEventSubscriber.1 = s 'MyStockEventSubscriber Class'
+	{
+		CLSID = s '{067EC5B8-1CE3-4E1C-9317-6E4B342A920E}'
+	}
+	MySubscriber.MyStockEventSubscriber = s 'MyStockEventSubscriber Class'
+	{
+		CLSID = s '{067EC5B8-1CE3-4E1C-9317-6E4B342A920E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {067EC5B8-1CE3-4E1C-9317-6E4B342A920E} = s 'MyStockEventSubscriber Class'
+		{
+			ProgID = s 'MySubscriber.MyStockEventSubscriber.1'
+			VersionIndependentProgID = s 'MySubscriber.MyStockEventSubscriber'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

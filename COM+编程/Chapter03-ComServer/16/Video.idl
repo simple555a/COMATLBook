@@ -1,0 +1,55 @@
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+cpp_quote("#define VCR_E_INTERNALERROR \
+	MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x200 + 1)")
+
+
+[
+	object,
+	uuid(318B4AD0-06A7-11d3-9B58-0080C8E11F14),
+	helpstring("IVideo Interface"),
+	pointer_default(unique)
+]
+interface IVideo : IUnknown
+{
+	[helpstring("Obtain the signal value")]
+	HRESULT GetSignalValue([out, retval] long* val);
+};
+
+[
+	object,
+	uuid(318B4AD1-06A7-11d3-9B58-0080C8E11F14),
+	helpstring("ISVideo Interface"),
+	pointer_default(unique)
+]
+interface ISVideo : IUnknown
+{
+	[helpstring("Obtain the S-Video signal value")]
+	HRESULT GetSVideoSignalValue([out, retval] long* val);
+};
+
+
+[
+	uuid(318B4AD2-06A7-11d3-9B58-0080C8E11F14),
+	version(1.0),
+	helpstring("VCR Type Library")
+]
+library VcrLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+	[
+		uuid(318B4AD3-06A7-11d3-9B58-0080C8E11F14),
+		helpstring("VCR Class")
+	]
+	coclass VCR
+	{
+		interface IVideo;
+		interface ISVideo;
+	};
+
+};

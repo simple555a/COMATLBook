@@ -1,0 +1,52 @@
+// ServerX.idl : IDL source for ServerX.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ServerX.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+	[
+		object,
+		uuid(F750DAC5-86A8-496c-925D-F0A6A192C2EF),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface ICallMe : IUnknown
+	{
+		HRESULT Hello();
+	};
+	
+	[
+		object,
+		uuid(1977F313-4863-4F38-B83F-3A261F2E8CDF),
+		dual,
+		helpstring("IMyServerX Interface"),
+		pointer_default(unique)
+	]
+	interface IMyServerX : IDispatch
+	{
+		[id(1), helpstring("method Advise")] HRESULT Advise([in] ICallMe* pCallMe);
+	};
+
+[
+	uuid(FCA6BF06-5761-4454-97C0-9619C2B71A2F),
+	version(1.0),
+	helpstring("ServerX 1.0 Type Library")
+]
+library SERVERXLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(DC9B4EE5-39E8-44B3-A7F2-AE72C9FF2B69),
+		helpstring("MyServerX Class")
+	]
+	coclass MyServerX
+	{
+		[default] interface IMyServerX;
+	};
+};

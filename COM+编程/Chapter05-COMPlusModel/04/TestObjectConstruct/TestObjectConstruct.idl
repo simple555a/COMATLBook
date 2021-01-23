@@ -1,0 +1,41 @@
+// TestObjectConstruct.idl : IDL source for TestObjectConstruct.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestObjectConstruct.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(5101B045-3A4B-468E-BFC6-D72293194169),
+		dual,
+		helpstring("IMyServer Interface"),
+		pointer_default(unique)
+	]
+	interface IMyServer : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] HRESULT DoIt([out, retval] BSTR* bsRetVal);
+	};
+
+[
+	uuid(158DA14F-98AA-41AD-98EE-961F7DBC24BE),
+	version(1.0),
+	helpstring("TestObjectConstruct 1.0 Type Library")
+]
+library TESTOBJECTCONSTRUCTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(EEF222FE-B09B-4E31-A618-B48E66ABC241),
+		helpstring("MyServer Class")
+	]
+	coclass MyServer
+	{
+		[default] interface IMyServer;
+	};
+};

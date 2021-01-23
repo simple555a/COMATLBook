@@ -1,0 +1,42 @@
+// JITSvr.idl : IDL source for JITSvr.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (JITSvr.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(AC58F159-6185-46A2-BD4D-98BE50BEA2D0),
+		dual,
+		helpstring("IMyJITDemo Interface"),
+		pointer_default(unique)
+	]
+	interface IMyJITDemo : IDispatch
+	{
+		[id(1), helpstring("method GetSalary")] HRESULT GetSalary([out, retval] long* pVal);
+		[id(2), helpstring("method SetEmployee")] HRESULT SetEmployee([in] BSTR bsEmployeeName);
+	};
+
+[
+	uuid(14E74231-3BC6-470A-9AC2-4318867F9443),
+	version(1.0),
+	helpstring("JITSvr 1.0 Type Library")
+]
+library JITSVRLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(B91E7367-B93F-425C-A1BA-8A59FF706EF9),
+		helpstring("MyJITDemo Class")
+	]
+	coclass MyJITDemo
+	{
+		[default] interface IMyJITDemo;
+	};
+};

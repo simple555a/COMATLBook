@@ -1,0 +1,23 @@
+HKCR
+{
+	TradeMgmt.TradeMgr.1 = s 'TradeMgr Class'
+	{
+		CLSID = s '{D19ABFAD-8266-4066-82AB-C1BD6C66B324}'
+	}
+	TradeMgmt.TradeMgr = s 'TradeMgr Class'
+	{
+		CLSID = s '{D19ABFAD-8266-4066-82AB-C1BD6C66B324}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D19ABFAD-8266-4066-82AB-C1BD6C66B324} = s 'TradeMgr Class'
+		{
+			ProgID = s 'TradeMgmt.TradeMgr.1'
+			VersionIndependentProgID = s 'TradeMgmt.TradeMgr'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

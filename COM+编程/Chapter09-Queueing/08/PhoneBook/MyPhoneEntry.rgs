@@ -1,0 +1,23 @@
+HKCR
+{
+	PhoneBook.MyPhoneEntry.1 = s 'MyPhoneEntry Class'
+	{
+		CLSID = s '{D8FEF07B-700D-4996-A327-A354F9B2E08E}'
+	}
+	PhoneBook.MyPhoneEntry = s 'MyPhoneEntry Class'
+	{
+		CLSID = s '{D8FEF07B-700D-4996-A327-A354F9B2E08E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D8FEF07B-700D-4996-A327-A354F9B2E08E} = s 'MyPhoneEntry Class'
+		{
+			ProgID = s 'PhoneBook.MyPhoneEntry.1'
+			VersionIndependentProgID = s 'PhoneBook.MyPhoneEntry'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

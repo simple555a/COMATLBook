@@ -1,0 +1,23 @@
+HKCR
+{
+	GlobalCount.MyCount.1 = s 'MyCount Class'
+	{
+		CLSID = s '{F4D5EE0E-C07D-4AFC-A602-55700E437F5F}'
+	}
+	GlobalCount.MyCount = s 'MyCount Class'
+	{
+		CLSID = s '{F4D5EE0E-C07D-4AFC-A602-55700E437F5F}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F4D5EE0E-C07D-4AFC-A602-55700E437F5F} = s 'MyCount Class'
+		{
+			ProgID = s 'GlobalCount.MyCount.1'
+			VersionIndependentProgID = s 'GlobalCount.MyCount'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'apartment'
+			}
+		}
+	}
+}

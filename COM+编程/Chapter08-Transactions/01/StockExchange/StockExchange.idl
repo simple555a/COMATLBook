@@ -1,0 +1,41 @@
+// StockExchange.idl : IDL source for StockExchange.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (StockExchange.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+[
+	object,
+	uuid(FB6AE95C-DAA3-4BD6-BF32-415D48E29653),
+	dual,
+	helpstring("IStockMgr Interface"),
+	pointer_default(unique)
+]
+interface IStockMgr : IDispatch
+{
+	[id(1), helpstring("method BuyStock")] HRESULT BuyStock([in] BSTR bsSymbol, [in] long lShares, [out, retval] long* plValue);
+};
+
+[
+	uuid(FE114E1B-BD0B-4DE6-BEE3-2FC48D609E6C),
+	version(1.0),
+	helpstring("StockExchange 1.0 Type Library")
+]
+library STOCKEXCHANGELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(E7579328-60AC-433B-8D79-EF2D1CDF1421),
+		helpstring("StockMgr Class")
+	]
+	coclass StockMgr
+	{
+		[default] interface IStockMgr;
+	};
+};

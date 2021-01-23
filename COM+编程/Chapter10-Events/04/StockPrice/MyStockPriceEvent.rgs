@@ -1,0 +1,23 @@
+HKCR
+{
+	StockPrice.MyStockPriceEvent.1 = s 'MyStockPriceEvent Class'
+	{
+		CLSID = s '{1F6F353D-5738-4C05-9DA1-A64E19370A0E}'
+	}
+	StockPrice.MyStockPriceEvent = s 'MyStockPriceEvent Class'
+	{
+		CLSID = s '{1F6F353D-5738-4C05-9DA1-A64E19370A0E}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1F6F353D-5738-4C05-9DA1-A64E19370A0E} = s 'MyStockPriceEvent Class'
+		{
+			ProgID = s 'StockPrice.MyStockPriceEvent.1'
+			VersionIndependentProgID = s 'StockPrice.MyStockPriceEvent'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,23 @@
+HKCR
+{
+	JITSvr.MyJITDemo.1 = s 'MyJITDemo Class'
+	{
+		CLSID = s '{B91E7367-B93F-425C-A1BA-8A59FF706EF9}'
+	}
+	JITSvr.MyJITDemo = s 'MyJITDemo Class'
+	{
+		CLSID = s '{B91E7367-B93F-425C-A1BA-8A59FF706EF9}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B91E7367-B93F-425C-A1BA-8A59FF706EF9} = s 'MyJITDemo Class'
+		{
+			ProgID = s 'JITSvr.MyJITDemo.1'
+			VersionIndependentProgID = s 'JITSvr.MyJITDemo'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

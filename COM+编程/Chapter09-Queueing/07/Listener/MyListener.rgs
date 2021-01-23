@@ -1,0 +1,23 @@
+HKCR
+{
+	Listener.MyListener.1 = s 'MyListener Class'
+	{
+		CLSID = s '{E99A63C7-36A1-41DD-BF3E-E8D493995C31}'
+	}
+	Listener.MyListener = s 'MyListener Class'
+	{
+		CLSID = s '{E99A63C7-36A1-41DD-BF3E-E8D493995C31}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E99A63C7-36A1-41DD-BF3E-E8D493995C31} = s 'MyListener Class'
+		{
+			ProgID = s 'Listener.MyListener.1'
+			VersionIndependentProgID = s 'Listener.MyListener'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

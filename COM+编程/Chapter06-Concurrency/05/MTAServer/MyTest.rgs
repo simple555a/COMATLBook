@@ -1,0 +1,23 @@
+HKCR
+{
+	MTAServer.MyTest.1 = s 'MyTest Class'
+	{
+		CLSID = s '{FB428858-F1C5-4892-89CF-3D1FD37696A6}'
+	}
+	MTAServer.MyTest = s 'MyTest Class'
+	{
+		CLSID = s '{FB428858-F1C5-4892-89CF-3D1FD37696A6}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FB428858-F1C5-4892-89CF-3D1FD37696A6} = s 'MyTest Class'
+		{
+			ProgID = s 'MTAServer.MyTest.1'
+			VersionIndependentProgID = s 'MTAServer.MyTest'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'free'
+			}
+		}
+	}
+}

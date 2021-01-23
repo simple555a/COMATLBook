@@ -1,0 +1,45 @@
+// SyncTest.idl : IDL source for SyncTest.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SyncTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(881A61AF-EABC-4269-9B76-8F602747E5A5),
+		dual,
+		helpstring("IPerson Interface"),
+		pointer_default(unique)
+	]
+	interface IPerson : IDispatch
+	{
+		[id(1), helpstring("method LockAccess")] HRESULT LockAccess();
+		[id(2), helpstring("method UnlockAccess")] HRESULT UnlockAccess();
+		[id(3), helpstring("method SetFirstName")] HRESULT SetFirstName([in] BSTR bsFirstName);
+		[id(4), helpstring("method SetLastName")] HRESULT SetLastName([in] BSTR bsLastName);
+		[id(5), helpstring("method GetName")] HRESULT GetName([out] BSTR* pbsFirstName, [out] BSTR* pbsLastName);
+	};
+
+[
+	uuid(61DCF0BE-80DF-47D0-9138-6D7CA178BB8B),
+	version(1.0),
+	helpstring("SyncTest 1.0 Type Library")
+]
+library SYNCTESTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(9838CED4-86AB-4BF1-9480-BD9FEEF6D651),
+		helpstring("Person Class")
+	]
+	coclass Person
+	{
+		[default] interface IPerson;
+	};
+};

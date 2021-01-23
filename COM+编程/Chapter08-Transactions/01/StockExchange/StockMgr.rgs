@@ -1,0 +1,23 @@
+HKCR
+{
+	StockExchange.StockMgr.1 = s 'StockMgr Class'
+	{
+		CLSID = s '{E7579328-60AC-433B-8D79-EF2D1CDF1421}'
+	}
+	StockExchange.StockMgr = s 'StockMgr Class'
+	{
+		CLSID = s '{E7579328-60AC-433B-8D79-EF2D1CDF1421}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E7579328-60AC-433B-8D79-EF2D1CDF1421} = s 'StockMgr Class'
+		{
+			ProgID = s 'StockExchange.StockMgr.1'
+			VersionIndependentProgID = s 'StockExchange.StockMgr'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,42 @@
+// ServerB.idl : IDL source for ServerB.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ServerB.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(859AAB4F-A379-4473-9ABB-2240BF6DFAA3),
+		dual,
+		helpstring("IMyServerB Interface"),
+		pointer_default(unique)
+	]
+	interface IMyServerB : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] 
+		HRESULT DoIt([in] long lDelegate, [out, retval] BSTR* pbsRetVal);
+	};
+
+[
+	uuid(A321DCAD-042E-418E-81BC-6EF2CCD21619),
+	version(1.0),
+	helpstring("ServerB 1.0 Type Library")
+]
+library SERVERBLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(42B1BCD1-95C1-46C0-91C3-3D3E89DC2CAE),
+		helpstring("MyServerB Class")
+	]
+	coclass MyServerB
+	{
+		[default] interface IMyServerB;
+	};
+};

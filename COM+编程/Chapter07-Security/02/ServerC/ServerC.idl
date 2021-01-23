@@ -1,0 +1,41 @@
+// ServerC.idl : IDL source for ServerC.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ServerC.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(46F039A6-7EB7-464B-B7AC-5EAA2B7824A4),
+		dual,
+		helpstring("IMyServerC Interface"),
+		pointer_default(unique)
+	]
+	interface IMyServerC : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] HRESULT DoIt([out, retval] BSTR* pbsRetVal);
+	};
+
+[
+	uuid(448DB4C5-319E-474F-81D4-3264CAB39F5F),
+	version(1.0),
+	helpstring("ServerC 1.0 Type Library")
+]
+library SERVERCLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(396221D7-FF96-454F-8316-F80915B38906),
+		helpstring("MyServerC Class")
+	]
+	coclass MyServerC
+	{
+		[default] interface IMyServerC;
+	};
+};

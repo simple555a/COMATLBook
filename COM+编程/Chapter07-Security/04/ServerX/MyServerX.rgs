@@ -1,0 +1,23 @@
+HKCR
+{
+	ServerX.MyServerX.1 = s 'MyServerX Class'
+	{
+		CLSID = s '{DC9B4EE5-39E8-44B3-A7F2-AE72C9FF2B69}'
+	}
+	ServerX.MyServerX = s 'MyServerX Class'
+	{
+		CLSID = s '{DC9B4EE5-39E8-44B3-A7F2-AE72C9FF2B69}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DC9B4EE5-39E8-44B3-A7F2-AE72C9FF2B69} = s 'MyServerX Class'
+		{
+			ProgID = s 'ServerX.MyServerX.1'
+			VersionIndependentProgID = s 'ServerX.MyServerX'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

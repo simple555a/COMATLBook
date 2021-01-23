@@ -1,0 +1,41 @@
+// TNAServer.idl : IDL source for TNAServer.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TNAServer.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(0552362E-0FF9-4406-94DB-6DA9094FCDE6),
+		helpstring("IMyTNAServer Interface"),
+		oleautomation,
+		pointer_default(unique)
+	]
+	interface IMyTNAServer : IUnknown
+	{
+		[helpstring("method DoIt")] HRESULT DoIt();
+	};
+
+[
+	uuid(BA06E206-AD33-4D3A-8B86-94F3199DFE56),
+	version(1.0),
+	helpstring("TNAServer 1.0 Type Library")
+]
+library TNASERVERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(1AA68EA4-8A78-4A49-9159-94B0740FEE4E),
+		helpstring("MyTNAServer Class")
+	]
+	coclass MyTNAServer
+	{
+		[default] interface IMyTNAServer;
+	};
+};

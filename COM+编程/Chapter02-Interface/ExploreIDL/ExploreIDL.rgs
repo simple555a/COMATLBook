@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{2B930574-0C8D-11D3-9B66-0080C8E11F14} = s 'ExploreIDL'
+		'ExploreIDL.EXE'
+		{
+			val AppID = s {2B930574-0C8D-11D3-9B66-0080C8E11F14}
+		}
+	}
+}

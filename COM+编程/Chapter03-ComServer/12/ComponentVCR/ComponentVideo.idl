@@ -1,0 +1,37 @@
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(318B4AD4-06A7-11d3-9B58-0080C8E11F14),
+	helpstring("IComponentVideo Interface"),
+	pointer_default(unique)
+]
+interface IComponentVideo : IUnknown
+{
+	[helpstring("Obtain the signal value")]
+	HRESULT GetCVideoSignalValue([out, retval] long* val);
+};
+
+[
+	uuid(318B4AD5-06A7-11d3-9B58-0080C8E11F14),
+	version(1.0),
+	helpstring("Component VCR Type Library")
+]
+library ComponentVcrLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+	[
+		uuid(318B4AD6-06A7-11d3-9B58-0080C8E11F14),
+		helpstring("Component VCR Class")
+	]
+	coclass ComponentVCR
+	{
+		interface IComponentVideo;
+	};
+
+};

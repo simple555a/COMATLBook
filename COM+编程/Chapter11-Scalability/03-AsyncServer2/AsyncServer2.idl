@@ -1,0 +1,41 @@
+// AsyncServer2.idl : IDL source for AsyncServer2.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AsyncServer2.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(CE1CCFE9-C075-4745-84E0-E7E4FCAFDAEC),
+		async_uuid(36878786-3C41-4359-874B-4E3494E17A94),
+		helpstring("IMySum2 Interface"),
+		pointer_default(unique)
+	]
+	interface IMySum2 : IUnknown
+	{
+		[helpstring("method GetSum")] HRESULT GetSum([in] long lVal1, [in] long lVal2, [out, retval] long* plSum);
+	};
+
+[
+	uuid(EBD57D32-07C5-4EF0-8CFE-2F9621C5F202),
+	version(1.0),
+	helpstring("AsyncServer2 1.0 Type Library")
+]
+library ASYNCSERVER2Lib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(FD73FC78-5565-41D9-A561-BF2CE61E64BD),
+		helpstring("MySum2 Class")
+	]
+	coclass MySum2
+	{
+		[default] interface IMySum2;
+	};
+};

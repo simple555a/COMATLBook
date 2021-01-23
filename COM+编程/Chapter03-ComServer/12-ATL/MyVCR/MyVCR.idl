@@ -1,0 +1,52 @@
+// MyVCR.idl : IDL source for MyVCR.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MyVCR.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(AAD50CB7-62EE-42DF-87C6-657DA9159C90),
+		helpstring("IVideo Interface"),
+		pointer_default(unique)
+	]
+	interface IVideo : IUnknown
+	{
+		[helpstring("method GetSignalValue")] HRESULT GetSignalValue([out, retval] long* pRetVal);
+	};
+
+	[
+		object,
+		uuid(D7BE98C6-3793-45CE-B52D-0B0195BD38F0),
+		helpstring("ISVideo Interface"),
+		pointer_default(unique)
+	]
+	interface ISVideo : IUnknown
+	{
+		[helpstring("method GetSVideoSignalValue")] HRESULT GetSVideoSignalValue([out, retval] long* pRetVal);
+	};
+
+[
+	uuid(6CE81852-DC6A-4D5E-B5C2-137F9285AF3B),
+	version(1.0),
+	helpstring("MyVCR 1.0 Type Library")
+]
+library MYVCRLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(471B8989-D258-4211-8E59-6CC8E1353A46),
+		helpstring("Vcr Class")
+	]
+	coclass Vcr
+	{
+		[default] interface IVideo;
+		interface ISVideo;
+	};
+};

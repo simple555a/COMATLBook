@@ -1,0 +1,41 @@
+// ActivityTest.idl : IDL source for ActivityTest.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ActivityTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	
+	[
+		object,
+		uuid(42141798-AB42-4AF1-B752-8FF5E6C12717),
+		dual,
+		helpstring("IMyTest Interface"),
+		pointer_default(unique)
+	]
+	interface IMyTest : IDispatch
+	{
+		[id(1), helpstring("method DoIt")] HRESULT DoIt();
+	};
+
+[
+	uuid(714BBB96-E9AF-4590-B59F-598878188106),
+	version(1.0),
+	helpstring("ActivityTest 1.0 Type Library")
+]
+library ACTIVITYTESTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(132CBDFA-F567-409B-8CFC-0EF6A9D81827),
+		helpstring("MyTest Class")
+	]
+	coclass MyTest
+	{
+		[default] interface IMyTest;
+	};
+};

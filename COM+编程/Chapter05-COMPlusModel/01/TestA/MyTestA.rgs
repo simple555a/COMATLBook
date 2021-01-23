@@ -1,0 +1,23 @@
+HKCR
+{
+	TestA.MyTestA.1 = s 'MyTestA Class'
+	{
+		CLSID = s '{0ADDCD1C-AE59-430B-9A52-83924779DA37}'
+	}
+	TestA.MyTestA = s 'MyTestA Class'
+	{
+		CLSID = s '{0ADDCD1C-AE59-430B-9A52-83924779DA37}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0ADDCD1C-AE59-430B-9A52-83924779DA37} = s 'MyTestA Class'
+		{
+			ProgID = s 'TestA.MyTestA.1'
+			VersionIndependentProgID = s 'TestA.MyTestA'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+; Module-Definition File Vcr.Def
+
+LIBRARY      "MyVcr.DLL"
+
+EXPORTS
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllCanUnloadNow     PRIVATE
