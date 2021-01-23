@@ -1,0 +1,90 @@
+// Server.idl : IDL source for Server.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Server.tlb) and marshalling code.
+
+
+//////////////////////////////////////////////////////
+// define my enumerators, encapsulated unions, 	  ////
+//   structures and classes                       ////
+//////////////////////////////////////////////////////
+
+// enumerator
+typedef enum {Monday=2, Tuesday, Wednesday, Thursday, Friday} workday;
+
+// structure
+typedef struct 
+{
+	long lElement;
+	long *pPointer;
+	float fElement;
+} MYSTRUCT;
+
+// encapsulated union
+typedef [switch_type(long)] union //"switch_type()" makes switch is a "long"
+{
+	[case(1)] 
+		float fFloat[2]; 
+	[case(25)] 
+		double dDouble; 
+	[case(27)]
+		MYSTRUCT myStruct;
+	[default] 
+    	long lLong; 
+} MYEUNION;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(C177116E-9AAA-11D3-805D-000000000000),
+		dual,
+		helpstring("IWzd Interface"),
+		pointer_default(unique)
+	]
+	interface IWzd : IDispatch
+	{
+		[id(1), helpstring("method Simple1")] HRESULT Simple1([in] unsigned char cArg, [in] short sArg, [in] unsigned short usArg,	[in] workday enumArg);
+		[id(2), helpstring("method Simple2")] HRESULT Simple2([in] long lArg, [in] unsigned long ulArg);
+		[id(3), helpstring("method Simple3")] HRESULT Simple3([in] float fArg, [in] double dArg);
+		[id(4), helpstring("method Simple4")] HRESULT Simple4([in] boolean bArg, [in] byte byArg, [in] hyper yArg, [in] unsigned hyper uyArg );
+		[id(5), helpstring("method Simple5")] HRESULT Simple5([in] long lArg1,[out] long *lArg2,[in,out] long *lArg3);
+		[id(6), helpstring("method Array1")] HRESULT Array1([in] long aArg[25]);
+		[id(7), helpstring("method Array2")] HRESULT Array2([in] long lSize, [in,size_is(lSize)] long aArg[][5]);
+		[id(8), helpstring("method Array3")] HRESULT Array3([in] long lFirst, [in] long lLast, [in] long lSize, [in,first_is(lFirst),last_is(lLast),size_is(lSize)] long *aArg);
+		[id(9), helpstring("method Array4")] HRESULT Array4([in] long lFirst, [in] long lLength, [in] long lSize, [in,first_is(lFirst),length_is(lLength),size_is(lSize)] long *aArg);
+		[id(10), helpstring("method Structs1")] HRESULT Structs1([in] MYSTRUCT myStruct, [in] IUnknown *myClass);
+		[id(11), helpstring("method EUnions1")] HRESULT EUnions1([in] long lType, [in,switch_is(lType)] MYEUNION myEUnion);
+		[id(12), helpstring("method MemPtr1")] HRESULT MemPtr1([in,ref] MYSTRUCT *pStruct);
+		[id(13), helpstring("method MemPtr2")] HRESULT MemPtr2([in,out,unique] MYSTRUCT **pPtr);
+		[id(14), helpstring("method MemPtr3")] HRESULT MemPtr3([in,out,ptr] MYSTRUCT **pPtr1,[in,out,ptr] MYSTRUCT **pPtr2);
+		[id(15), helpstring("method MemPtr4")] HRESULT MemPtr4([in,out] MYSTRUCT **pPtr1,[in,out] MYSTRUCT **pPtr2);
+		[id(16), helpstring("method VBVars1")] HRESULT VBVars1([in] BSTR bstr, [out] BSTR *pBSTR);
+		[id(17), helpstring("method VBVars2")] HRESULT VBVars2([in,out] SAFEARRAY(BYTE) *pSA);
+		[id(18), helpstring("method VBVars3")] HRESULT VBVars3([in,out] VARIANT *pVAR1,[in,out] VARIANT *pVAR2,[in,out] VARIANT *pVAR3);
+		[id(19), helpstring("method VBVars4")] HRESULT VBVars4([out,retval] long *pVal);
+	};
+
+[
+	uuid(C1771162-9AAA-11D3-805D-000000000000),
+	version(1.0),
+	helpstring("Server 1.0 Type Library")
+]
+library SERVERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(C177116F-9AAA-11D3-805D-000000000000),
+		helpstring("Wzd Class")
+	]
+	coclass Wzd
+	{
+		[default] interface IWzd;
+	};
+};

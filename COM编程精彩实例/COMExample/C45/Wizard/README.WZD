@@ -1,0 +1,55 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create the ATL server and object as usual.
+
+2) Manually add a new class to the top of the created object's .h file
+   that looks like this:
+
+/////////////////////////////////////////////////////////////////////////////
+// CWzdLicense-- a class that checks on licensing
+class CWzdLicense
+{
+protected:
+   static BOOL VerifyLicenseKey(BSTR bstr)
+   {
+	   // compare bstr with embedded license info
+	   return TRUE; // valid license
+   }
+
+   static BOOL GetLicenseKey(DWORD dwReserved, BSTR* pBstr) 
+   {
+      *pBstr = L"licence";// embedded license info
+      return TRUE;
+   }
+
+   static BOOL IsLicenseValid() 
+   {  
+	   // open license file and compare with license key info embedded in this class
+	   return TRUE; //TRUE==licensed
+   }
+};
+
+3) In the IsLicenseValid() method above, add logic that opens a file on disk
+   that checks to see if this object is running on a licensed system.
+
+4) Fill the VerifyLicenseKey() method with a comparision of the input BSTR string and a
+   valid license.
+   
+5) Return the license in the GetLicenseKey() method. Note that this method is not avaliable
+   to the client, which would obviously be fairly self-defeating, but is available to your 
+   object.
+
+6) Also add a macro to this .h file that references this class:
+
+	DECLARE_CLASSFACTORY2(CWzdLicense)
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

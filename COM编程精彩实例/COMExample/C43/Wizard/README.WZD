@@ -1,0 +1,181 @@
+/////////////////////////////////////////////////////////////////////
+// How to use the ADO COM object.
+/////////////////////////////////////////////////////////////////////
+1) Import the ADO class definitions into any source file that will be using ADO:
+import com.ms.com.*;
+import com.ms.wfc.data.*;
+
+2) Start by creating the ADO COM objects for connecting and issuing commands to 
+   the data source:
+	com.ms.wfc.data.Command command=new com.ms.wfc.data.Command();
+	com.ms.wfc.data.Connection connection=new com.ms.wfc.data.Connection();	
+
+3) To open a data source connection use:
+// initialize connection object
+		try {
+		connection.setConnectionTimeout(
+					1000		//default is DEFAULT_DBCONNECTPROP
+					);
+
+// open connection to db
+		connection.open(
+					"WZDDB",			// connection string DSN (other ex:"MSOracle8") 
+					"",				// user id
+					""				// password
+					); 	
+
+// initialize command object
+		command.setActiveConnection(connection);
+			
+4) To close the data source connection:
+	connection.close();
+
+5) To get a record set from the data source using SQL use:
+		com.ms.wfc.data.Recordset rs =new Recordset();
+
+// specify SQL command
+	// *NOTE: SQL will not retrieve blobs--must use Stored Procedure
+		command.setCommandText("SELECT * FROM CUSTOMERS");
+		command.setCommandType(AdoEnums.CommandType.TEXT);	// what text in command specifies. also:
+									  // adCmdStoredProc - stored procedure
+							   		  // adCmdTable - table name
+							   		  // adCmdFile - file name
+							   		  // adCmdTableDirect - 
+							   		  // adCmdUnknown - unknown
+
+// open record set
+		rs.open(command, 				// source of record set--can be a SQL statement, etc.--see last param
+			null, 							// active connection object (optional)
+			AdoEnums.CursorType.FORWARDONLY,// cursor type. also:
+										 // adOpenForwardOnly 
+										 //	adOpenKeyset Opens a keyset-type cursor. 
+										 //	adOpenDynamic Opens a dynamic-type cursor. 
+										 //	adOpenStatic Opens a static type cursor. 
+			AdoEnums.LockType.OPTIMISTIC,// record set locking type. also:
+										// adLockReadOnly -- read only
+										// adLockPessimistic --lock records at the data source when editing
+										// adLockOptimistic -- lock records only when you call the Update method. 
+										// adLockBatchOptimistic -- same as above, used with batch mode
+			AdoEnums.CommandType.UNSPECIFIED// define source param--here we can use a command object. also:
+											// adCmdText indicates source is a SQL statement
+											// adCmdTable indicates source is a table name. 
+											// adCmdStoredProc indicates source as a stored procedure. 
+											// adCmdUnknown indicates source argument is not known. 
+			);
+
+6) To scroll through the recordset:
+	while (!rs.getEOF())
+	{
+		String CustomerID=rs.getField("CustomerID").getString();
+		String CompanyName=rs.getField("CompanyName").getString();
+		String ContactName=rs.getField("ContactName").getString();
+		rs.moveNext();
+	}
+	rs.moveFirst();
+
+
+7) To add a record to the recordset use:
+	rs.addNew();
+	rs.getField("CustomerID").setString("BONCO"); 
+	rs.getField("CompanyName").setString("Franks"); 
+	rs.getField("ContactName").setString("Runk"); 
+	rs.update();
+	
+
+8) To modify a field in a row in a recordset:
+// edits current record
+	rs.getField("ContactName").setString("Smith"); 
+	rs.update();
+
+9) To delete a record from the recordset:
+// deletes current record
+	rs.delete(AdoEnums.Affect.CURRENT);
+	
+10)	To close the recordset:
+	rs.close();
+
+11) To execute a stored procedure:
+
+	// specify timeout (optional)
+	command.setCommandTimeout(
+				1000				//default is DEFAULT_DBCONNECTPROP
+				);
+
+	// specify stored procedure
+	command.setCommandText("Customers Query");
+	command.setCommandType(AdoEnums.CommandType.STOREDPROC);
+
+	// in order and one-by-one, add the calling parameter(s) required by the stored procedure
+	command.getParameters().append(command.createParameter(
+			"",					 		// a user assigned parameter name (optional)
+			AdoEnums.DataType.INTEGER,		// data type. 
+			AdoEnums.ParameterDirection.INPUT,// direction. 
+			5,							// database column size for this parameter required by SP (must be a long)
+			new Variant(1234)			 			//if adParamInput or adParamInputOutput, the input value as a variant
+			));
+
+	// execute stored procedure
+	command.execute(null, 						// returned number of records affected
+			AdoEnums.CommandType.STOREDPROC	// what text in command specifies.
+			);		
+
+	// retrieve an out parameter (if parameter direction is adParamOutput, adParamInputOutput or adParamReturnValue)
+	// retrieve a long from the zeroth parameter
+	long vt=command.getParameters().getItem(0).getValue().getvt(); //retrieve the 0 parameter
+	// retrieve a variant the zeroth parameter
+	Variant vart=command.getParameters().getItem(0).getValue();
+	
+
+12) To execute a stored procedure that returns a recordset:
+
+// specify stored procedure with spot where recordset will be returned marked with "resultset"
+	command.setCommandText("{ call Wzd.Package.SP(?,?,?,?,{resultset 1024, my_out})}");	
+	command.setCommandType(AdoEnums.CommandType.TEXT);
+
+// add input parameters only, one for each "?" in stored procedure call above
+	command.getParameters().append(command.createParameter(
+			"",						 		// a user assigned parameter name (optional)
+			AdoEnums.DataType.INTEGER,		// data type. 
+			AdoEnums.ParameterDirection.INPUT,// direction. 
+			5,							// database column size for this parameter required by SP (must be a long)
+			new Variant(1234)			 			//if adParamInput or adParamInputOutput, the input value as a variant
+			));
+
+
+// open, scroll through and close record set as above
+	rs.open(command,null,AdoEnums.CursorType.FORWARDONLY,AdoEnums.LockType.OPTIMISTIC,AdoEnums.CommandType.UNSPECIFIED);
+	rs.close();
+
+13) To use transactions when not using MTS/COM+:
+	connection.beginTrans();
+
+	connection.commitTrans();
+
+	connection.rollbackTrans();
+
+
+
+14) To catch and scroll through ADO errors:
+	try
+	{
+		...using ADO COM objects...
+	}
+	catch(AdoException ae)
+	{
+		for (int i = 0; i< connection.getErrors().getCount(); i++)
+		{
+			com.ms.wfc.data.Error errItem = connection.getErrors().getItem(i);
+			System.out.println(errItem.getDescription());
+			System.out.println("\nPress <Enter> to continue...");
+		}
+	}
+	catch (Exception ae)
+	{
+	}
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

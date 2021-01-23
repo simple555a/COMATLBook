@@ -1,0 +1,24 @@
+/////////////////////////////////////////////////////////////////////
+// How to use the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Use the VJ++ Studio's Project/Add COM Wrapper... menu commands to create
+   a J++ class that wraps the COM class.
+
+2) Create the COM class with:
+
+	server.Wzd wzd=new server.Wzd();
+
+where server is the server's name and Wzd is the class name.
+
+3) Call its methods as usual using:
+
+		wzd.Method1(1234);
+
+4) The COM object will be automatically released.
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

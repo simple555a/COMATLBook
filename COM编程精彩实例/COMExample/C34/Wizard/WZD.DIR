@@ -1,0 +1,15 @@
+CollSrv.cpp
+CollSrv.def
+CollSrv.dsp
+CollSrv.dsw
+CollSrv.idl
+CollSrv.rc
+ColSrvps.def
+ColSrvps.mk
+resource.h
+StdAfx.cpp
+StdAfx.h
+WzdColl.cpp
+WzdColl.h
+WzdColl.rgs
+

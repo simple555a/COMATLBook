@@ -1,0 +1,51 @@
+// Server.idl : IDL source for Server.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Server.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(603F1DE4-A7D8-11D3-A398-00C04F570E2C),
+		dual,
+		helpstring("IWzd Interface"),
+		pointer_default(unique)
+	]
+	interface IWzd : IDispatch
+	{
+		[id(1), helpstring("method Method1")] HRESULT Method1([in] long lArg);
+	};
+
+[
+	uuid(603F1DD8-A7D8-11D3-A398-00C04F570E2C),
+	version(1.0),
+	helpstring("Server 1.0 Type Library")
+]
+library SERVERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(603F1DE5-A7D8-11D3-A398-00C04F570E2C),
+		helpstring("_IWzdEvents Interface")
+	]
+	dispinterface _IWzdEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method Callback")] HRESULT Callback([in] long lArg);
+	};
+
+	[
+		uuid(37D9335D-A706-11D3-A398-00C04F570E2C),
+		helpstring("Wzd Class")
+	]
+	coclass Wzd
+	{
+		[default] interface IWzd;
+		[default, source] dispinterface _IWzdEvents;
+	};
+};

@@ -1,0 +1,49 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM server object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create two interface server projects, one for the actual server COM class
+   and one for the COM class your client will implement.
+
+2) Create the COM class server as usual with the MFC ClassWizard.
+
+3) To the bottom of the .h file of this new class add a connection map. The
+   Interface ID will be of the interface that the client will be implementing:
+	DECLARE_CONNECTION_MAP()
+	BEGIN_CONNECTION_PART (CWzdSrv, CallBackCP)
+	    CONNECTION_IID(IID_IWzdSink)
+	END_CONNECTION_PART(CallBackCP)
+
+	where CWzdSrv is the COM class and CallBackCP becomes m_xCallBackCP, a member 
+	variable of CWzdSrv derived from MFC's CConnectionPoint class
+
+4) To the .cpp of the new class add the implementation of the connection map:
+
+BEGIN_CONNECTION_MAP(CWzdSrv, CCmdTarget)
+    CONNECTION_PART(CWzdSrv, IID_IWzdSink, CallBackCP)
+END_CONNECTION_MAP()
+
+5) Also add a method to the .h and .cpp file that will call all clients that connect 
+   to this server object:
+
+void CWzdSrv::CallBackClients()
+{
+	const CPtrArray *pConnections=m_xCallBackCP.GetConnections();
+	int nConnections=pConnections->GetSize();
+	for (int i=0;i<nConnections;i++)
+	{
+		IWzdSink *pWzdSink=(IWzdSink*)(pConnections->GetAt(i));
+		pWzdSink->Callback(1234);
+	}
+}
+
+6) Use this method anywhere else to "callback" all the clients.
+
+7) Refer to other examples for how an MFC, VB or J++ client can receive this
+   callback.
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

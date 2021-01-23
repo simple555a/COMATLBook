@@ -1,0 +1,26 @@
+HKCR
+{
+	Server.Wzd.1 = s 'Wzd Class'
+	{
+		CLSID = s '{C177116F-9AAA-11D3-805D-000000000000}'
+	}
+	Server.Wzd = s 'Wzd Class'
+	{
+		CLSID = s '{C177116F-9AAA-11D3-805D-000000000000}'
+		CurVer = s 'Server.Wzd.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C177116F-9AAA-11D3-805D-000000000000} = s 'Wzd Class'
+		{
+			ProgID = s 'Server.Wzd.1'
+			VersionIndependentProgID = s 'Server.Wzd'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{C1771162-9AAA-11D3-805D-000000000000}'
+		}
+	}
+}

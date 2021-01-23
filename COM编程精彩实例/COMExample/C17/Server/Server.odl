@@ -1,0 +1,76 @@
+// Server.odl : type library source for ActiveX Control project.
+
+// This file will be processed by the Make Type Library (mktyplib) tool to
+// produce the type library (Server.tlb) that will become a resource in
+// Server.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(A039CB64-AE33-11D3-8088-000000000000), version(1.0),
+  helpfile("Server.hlp"),
+  helpstring("Server ActiveX Control module"),
+  control ]
+library SERVERLib
+{
+	importlib(STDOLE_TLB);
+	importlib(STDTYPE_TLB);
+
+	//  Primary dispatch interface for CServerCtrl
+
+	[ uuid(A039CB65-AE33-11D3-8088-000000000000),
+	  helpstring("Dispatch interface for Server Control"), hidden ]
+	dispinterface _DServer
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CServerCtrl)
+			[id(2)] long Property1;
+			[id(DISPID_APPEARANCE), bindable, requestedit] short Appearance;
+			[id(1)] float Property2;
+			//}}AFX_ODL_PROP
+
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CServerCtrl)
+			[id(3)] long Method1(long lArg);
+			[id(DISPID_REFRESH)] void Refresh();
+			//}}AFX_ODL_METHOD
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+	};
+
+	//  Event dispatch interface for CServerCtrl
+
+	[ uuid(A039CB66-AE33-11D3-8088-000000000000),
+	  helpstring("Event interface for Server Control") ]
+	dispinterface _DServerEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+			// NOTE - ClassWizard will maintain event information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_EVENT(CServerCtrl)
+			[id(1)] void Event1(long lArg);
+			[id(DISPID_CLICK)] void Click();
+			//}}AFX_ODL_EVENT
+	};
+
+	//  Class information for CServerCtrl
+
+	[ uuid(A039CB67-AE33-11D3-8088-000000000000),
+	  helpstring("Server Control"), control ]
+	coclass Server
+	{
+		[default] dispinterface _DServer;
+		[default, source] dispinterface _DServerEvents;
+	};
+
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};

@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{4832AAB3-AB3F-11D3-8081-000000000000} = s 'WzdSrv'
+		'WzdSrv.EXE'
+		{
+			val AppID = s {4832AAB3-AB3F-11D3-8081-000000000000}
+		}
+	}
+}

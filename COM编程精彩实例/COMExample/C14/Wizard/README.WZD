@@ -1,0 +1,107 @@
+/////////////////////////////////////////////////////////////////////
+// How to use a COM object that will callback your MFC client.
+/////////////////////////////////////////////////////////////////////
+
+1) The client should call the following to initialize the COM DLL from
+   the main process _and_ from any thread that will be using COM:
+
+	::CoInitializeEx(
+		NULL,				//always NULL
+		COINIT_APARTMENTTHREADED	//see book about threading models
+		);
+
+	NOTE: You also need to add _WIN32_DCOM to your project settings under 
+	"Preprocessor definitions" in order to get the prototype definition for
+	::CoInitializeEx() included in your compile.
+
+2) Create a guids.h file that contains the interface ID of the class that
+   the client will implement for callbacks and add it to the server's
+   application cpp file:
+
+#if !defined guids_h
+#define guids_h
+
+const IID IID_IWzdSink = {0x20050FE0,0xA719,0x11d3,{0xA3,0x98,0x00,0xC0,0x4F,0x57,0x0E,0x2C}};
+
+#endif 
+
+
+3) Implement the class that the server will be using to call the client. First pick
+   a class in the client application that will contain the callback class. Then
+   add an interface map to the class to it's .h file specifying the callback class:
+
+    DECLARE_INTERFACE_MAP()
+	BEGIN_INTERFACE_PART(WzdSinkClass, IWzdSink)
+		STDMETHOD_(HRESULT,Callback)(long);
+	END_INTERFACE_PART(WzdSinkClass)
+
+4) Then implement the callback class inside of this class with the following, including
+   the actual method that's called by the server:
+/////////////////////////////////////////////////////////////////////////////
+// Implement IWzdSink methods
+ULONG FAR EXPORT CTestDlg::XWzdSinkClass::AddRef()
+{
+	METHOD_PROLOGUE(CTestDlg, WzdSinkClass);
+	return pThis->ExternalAddRef();//pThis accesses enclosing class's this pointer
+}
+
+ULONG FAR EXPORT CTestDlg::XWzdSinkClass::Release()
+{
+	METHOD_PROLOGUE(CTestDlg, WzdSinkClass);
+	return pThis->ExternalRelease();
+}
+
+HRESULT FAR EXPORT CTestDlg::XWzdSinkClass::QueryInterface(REFIID iid, void FAR* FAR* ppvObj)
+{
+	METHOD_PROLOGUE(CTestDlg, WzdSinkClass);
+    return (HRESULT)pThis->ExternalQueryInterface(&iid, ppvObj);
+}
+
+HRESULT __stdcall CTestDlg::XWzdSinkClass::Callback(long lArg)
+{
+	METHOD_PROLOGUE(CTestDlg, WzdSinkClass);
+
+    return S_OK;
+}
+
+5) Create the COM object that will be calling us back as usual with:
+	IWzdPtr pPtr;
+	HRESULT hr=pPtr.CreateInstance(__uuidof(Wzd));
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+6) Then get a pointer to our own callback class:
+	IWzdSink *iWzdSink=NULL;
+    hr = m_xWzdSinkClass.QueryInterface (IID_IWzdSink, (void**) &iWzdSink);
+    m_xWzdSinkClass.Release(); // undo AddRef() performed by QI, unneeded when server is us
+
+7) Use an MFC static function to link the created COM object with this callback class:
+	DWORD dwConnectID;
+	AfxConnectionAdvise(
+				pPtr.GetInterfacePtr(),	// the real server
+				IID_IWzdSink,			// our sink's IID
+				iWzdSink,				// our sink's pointer
+				FALSE,					// TRUE == increment our sink object's ref count
+				&dwConnectID);			// identifier for AfxConnectionUnadvise()
+
+The server can now call the client's Callback method.
+
+8) To unconnect the two, use:
+	AfxConnectionUnadvise(
+				pPtr.GetInterfacePtr(),	// the real server
+				IID_IWzdSink,			// our sink's IID
+				iWzdSink,				// our sink's pointer
+				FALSE,					// TRUE == decrement our sink object's ref count
+				dwConnectID);			// identifier from AfxConnectionAdvise()
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

@@ -1,0 +1,145 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the first COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create the MFC COM class as usualusing the ClassWizard, then add the following 
+   to the COM class's constructor:
+
+	// allow this object to be aggregated by another
+	EnableAggregation();
+
+
+/////////////////////////////////////////////////////////////////////
+// How to write a second COM object to aggregate the first object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create a guids.h file containing the class and interface ID's of the object you
+   wish to aggregate:
+
+#if !defined guids_h
+#define guids_h
+
+const IID CLSID_IWzdAgSvr = { 0x603f1e0c, 0xa7d8, 0x11d3, 0xa3, 0x98, 0x0, 0xc0, 0x4f, 0x57, 0xe, 0x2c };
+const IID IID_IWzdAgg = {0x7ECEE460,0xA804,0x11d3,{0xA3,0x98,0x00,0xC0,0x4F,0x57,0x0E,0x2C}};
+
+#endif 
+
+2) Create the MFC COM class as usual using the ClassWizard.
+
+3) To the .h file of the generated class, add a member variable that will hold the
+   pointer to the aggregated object:
+
+private:
+    IUnknown* m_punkWzdAgSvr;
+
+4) Also add the definition for the following class override:
+
+    // override for aggregation
+    virtual BOOL OnCreateAggregates();
+
+5) To the .cpp file of the generated class, include the guids.h file:
+
+#include "guids.h"
+
+6) Also initialize the new member variable to NULL:
+
+	// aggregated object(s)
+	m_punkWzdAgSvr=NULL;
+
+7) Also implement the OnCreateAggregates() function by creating an instance
+   of the aggregated COM object:
+
+BOOL CWzdSrv::OnCreateAggregates()
+{
+    // create the aggregate object(s)
+    HRESULT hr = ::CoCreateInstance(CLSID_IWzdAgSvr,
+                                    GetControllingUnknown(),
+                                    CLSCTX_INPROC_SERVER,
+                                    IID_IUnknown,
+                                    (LPVOID*)&m_punkWzdAgSvr);
+    if (FAILED(hr)) 
+	{
+        m_punkWzdAgSvr = NULL;
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+8) In the OnFinalRelease() function, release the aggregated object:
+
+	// release aggregate(s) we created
+	m_punkWzdAgSvr->Release();
+
+9) And finally add an aggregate macro to the interface map:
+
+    INTERFACE_AGGREGATE(CWzdSrv, m_punkWzdAgSvr) //add this line so that MFC knows to look for additional methods in aggregated object
+
+
+/////////////////////////////////////////////////////////////////////
+// How to use the COM object.
+/////////////////////////////////////////////////////////////////////
+1) The client should call the following to initialize the COM DLL from
+   the main process _and_ from any thread that will be using COM:
+
+	::CoInitializeEx(
+		NULL,				//always NULL
+		COINIT_APARTMENTTHREADED	//see book about threading models
+		);
+
+	NOTE: You also need to add _WIN32_DCOM to your project settings under 
+	"Preprocessor definitions" in order to get the prototype definition for
+	::CoInitializeEx() included in your compile.
+
+2) Include the guids for both the aggregated as well as the aggregating COM object.
+
+#include "IServer\IWzd.h"
+#include "IAggSvr\IWzdAgg.h"
+#include "guids.h"
+#include <objbase.h>
+
+3) Create the aggregating object as usual:
+
+	IWzd *iWzd=NULL;
+	HRESULT hr=::CoCreateInstance(
+				CLSID_IWzdSrv,		// name of dll to load
+				NULL,				// aggregated COM object (none)
+				CLSCTX_INPROC_SERVER,// use dll
+				IID_IWzd,			// class to create and object of
+				(LPVOID*) &iWzd);	// returned object pointer
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+4) Use QueryInterface() to get a pointer to the aggregated object:
+
+	IWzdAgg *iWzdAgg=NULL;
+	hr=iWzd->QueryInterface(IID_IWzdAgg, (LPVOID*)&iWzdAgg);
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+5) Access the methods as before:
+	long lArg;
+	iWzdAgg->Method1(1234,&lArg);
+	
+	long lArg2=12345678L;
+	unsigned long ulArg=4026531840L;
+	iWzd->Method2(lArg2, ulArg);
+
+6) You must still release the aggregated object:
+
+	iWzd->Release();
+	iWzdAgg->Release(); // must still release aggregated interface
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

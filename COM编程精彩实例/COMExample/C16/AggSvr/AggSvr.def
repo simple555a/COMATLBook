@@ -1,0 +1,10 @@
+; AggSvr.def : Declares the module parameters for the DLL.
+
+LIBRARY      "AggSvr"
+DESCRIPTION  'AggSvr Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+	DllCanUnloadNow PRIVATE
+	DllGetClassObject PRIVATE
+	DllRegisterServer PRIVATE

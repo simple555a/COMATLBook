@@ -1,0 +1,30 @@
+'/////////////////////////////////////////////////////////////////////
+'// How to use the COM object.
+'/////////////////////////////////////////////////////////////////////
+
+1) Add the COM object to your VB project using the Project/References menu commands.
+   For details, please refer to the book.
+
+2) To use a COM object the most efficiently where it can use the dispatch ID's
+   directly, use:
+    Dim IWzdSrv1 As New SERVERLib.Wzd   'create object
+    IWzdSrv1.Method1 (1234)             'call its methods
+        
+3) To use a COM obejct whose type isn't known initially:
+    Dim IWzdSrv2 As Object
+    Set IWzdSrv2 = New SERVERLib.Wzd
+    IWzdSrv2.Method1 (4321)
+    
+4) To create a COM object using its ProjID:
+    Dim IWzdSrv3 As Object
+    Set IWzdSrv3 = CreateObject("Server.Wzd")
+    IWzdSrv3.Method1 (9876)
+    
+5) The COM object will be automatically released.
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

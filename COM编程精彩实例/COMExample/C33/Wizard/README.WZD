@@ -1,0 +1,78 @@
+/////////////////////////////////////////////////////////////////////
+// How to pass data between VB and C++ using COM.
+/////////////////////////////////////////////////////////////////////
+
+1) To pass bytes, integers, longs, singles (floats), and doubles:
+In VB use:
+    Dim cArg As Byte
+    Dim sArg As Integer
+    Dim lArg As Long
+    Dim fArg As Single
+    Dim dArg As Double
+    cls.method(cArg, sArg, lArg, fArg, dArg)
+
+In the IDL file for in's and out's use:
+	[in] unsigned char cArg, [in] short sArg, [in] long lArg, [in] float fArg, [in] double dArg
+	[out] unsigned char *pcArg, [out] short *psArg, [out] long *plArg, [out] float *pfArg, [out] double *pdArg
+
+In the .cpp and .h C++ files use:
+	unsigned char cArg, short sArg, long lArg, float fArg, double dArg
+	unsigned char *pcArg, short *psArg, long *plArg, float *pfArg, double *pdArg
+
+
+2) To pass strings (BSTR's)
+In VB use:
+    Dim sArg As String
+    cls.method(sArg)
+
+In the IDL file for in's and out's use:
+	[in] BSTR bstr
+	[out] BSTR *pBSTR
+
+In the .cpp and .h C++ files use:
+	BSTR bstr
+	BSTR *pBSTR
+
+3) To pass arrays (safearrays in C++)
+In VB use:
+    Dim aArg(1 To 25) As Byte
+    cls.method(aArg)
+
+In the IDL file for in's and out's use:
+	[in] SAFEARRAY(BYTE) sa
+	[out] SAFEARRAY(BYTE) *pSA
+
+In the .cpp and .h C++ files use:
+	SAFEARRAY* sa
+	SAFEARRAY** pSA
+
+4) To pass variants:
+In VB use:
+    Dim vArg As Variant	'or any untyped argument
+    cls.method(vArg)
+
+In the IDL file for in's and out's use:
+	[in] VARIANT var
+	[out] VARIANT* pVAR
+
+In the .cpp and .h C++ files use:
+	VARIANT var
+	VARIANT* pVAR
+
+5) To use VB's return value argument:
+In VB use:
+	Dim lArg as Long
+	lArg = cls.method()
+
+In the IDL file use (at the end of the line of arguments!):
+	[out,retval] long *plArg
+
+In the .cpp and .h files use:
+	long *plArg
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

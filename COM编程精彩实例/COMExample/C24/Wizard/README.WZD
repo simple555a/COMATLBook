@@ -1,0 +1,69 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create the ATL server and COM class as usual using the wizards.
+
+2) In the IDL file, manually copy and paste the COM class's interface
+   for as many tearoff interfaces you need. Make sure to change the GUID
+   for each interface you add--which you can do by just adding 20 to the
+   first group of numbers. Also add these interfaces to the Library definition
+   below so that they become part of the type library.
+
+3) In the .h file, copy and paste the original COM class definition
+   for each tearoff you're adding. In the new tearoff classes, change the
+   base class to CComTearOffObjectBase<CWzd> and remove everything except
+   the interface map as in this example:
+
+class ATL_NO_VTABLE CWzdTear : 
+	public IDispatchImpl<IWzdTear, &IID_IWzdTear, &LIBID_SERVERLib>,
+	public CComTearOffObjectBase<CWzd>
+{
+public:
+	CWzdTear()
+	{
+	}
+
+BEGIN_COM_MAP(CWzdTear)
+	COM_INTERFACE_ENTRY(IWzdTear)
+END_COM_MAP()
+
+public:
+};
+
+4) In the original COM class's interface map, add a COM_INTERFACE_ENTRY_TEAR_OFF 
+   macro for each tearoff interface:
+
+	COM_INTERFACE_ENTRY_TEAR_OFF(IID_IWzdTear, CWzdTear)
+
+5) You can now use the ClassView tab of the Workspace View to add methods and
+   properties to these new COM classes.
+
+/////////////////////////////////////////////////////////////////////
+// How to use the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) You can now use this object like any other. Create it like so:
+
+	IWzdPtr pPtr;
+	HRESULT hr=pPtr.CreateInstance(__uuidof(Wzd));
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+	pPtr->Method1(1234);
+
+2) Create the tearoff like so using smart pointers:
+	IWzdTearPtr pTear(pPtr);
+	pTear->Method2(1234);
+
+3) When the smart pointer is destroyed, so is the tear off object!
+
+	
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

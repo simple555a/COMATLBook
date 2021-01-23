@@ -1,0 +1,39 @@
+// Scribe.idl : IDL source for Scribe.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Scribe.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(9431787F-D0FB-11D3-B7BD-000000000000),
+		dual,
+		helpstring("IWzdSubscribe Interface"),
+		pointer_default(unique)
+	]
+	interface IWzdSubscribe : IDispatch
+	{
+		[id(1), helpstring("method WzdEvent")] HRESULT WzdEvent([in] long lArg);
+	};
+
+[
+	uuid(94317871-D0FB-11D3-B7BD-000000000000),
+	version(1.0),
+	helpstring("Scribe 1.0 Type Library")
+]
+library SUBSCRIBERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(94317880-D0FB-11D3-B7BD-000000000000),
+		helpstring("WzdSubscribe Class")
+	]
+	coclass WzdSubscribe
+	{
+		[default] interface IWzdSubscribe;
+	};
+};

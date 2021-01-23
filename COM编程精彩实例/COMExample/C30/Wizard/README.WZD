@@ -1,0 +1,59 @@
+/////////////////////////////////////////////////////////////////////
+// How to use a COM object that will callback your J++ client.
+/////////////////////////////////////////////////////////////////////
+
+1) Include the COM package:
+
+import com.ms.com.*;
+
+2) Wrap the COM class as usual using the "Project/Add COM Wrapper" menu 
+   command.
+
+3) Modify your class declaration to include the implementation of the
+   callback portion of this class wrapper (examine the generated wrapper
+   to get the exact name):
+
+public class Form1 extends Form implements server._IWzdEvents
+{
+}
+
+4) Implement the method(s) of the callback class:
+
+	public void Callback(int lArg)
+	{
+	}
+
+
+5) Create a global ConnectionPointCookie class variable:
+
+public class Form1 extends Form implements server._IWzdEvents
+{
+	ConnectionPointCookie cookie; // Cookie that connects your event
+	public Form1()
+	{
+		:	:	:
+
+6) At some point create the COM object as usual, and then create an
+   instance of the ConnectionPointCookie class using the COM object's 
+   reference:
+
+		// creater server
+		server.Wzd wzd=new server.Wzd();
+
+		// connect to server's connection point
+		cookie = new ConnectionPointCookie(
+					wzd,				//source of callbacks
+					this,				//destination of callbacks
+					server._IWzdEvents.class); //interface class
+
+
+7) The server will now call "Callback()".
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

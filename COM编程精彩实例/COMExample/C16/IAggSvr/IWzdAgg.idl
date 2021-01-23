@@ -1,0 +1,15 @@
+// IWzdAgg.idl :  IDL source for the IWzdAgg interface 
+//
+
+// NOTE: no automation declarations--use MFC's built-in support for that
+import "unknwn.idl";
+	[
+		object,
+		uuid(7ECEE460-A804-11d3-A398-00C04F570E2C),
+		pointer_default(unique)
+	]
+	interface IWzdAgg : IUnknown
+	{
+		HRESULT Method1([in] long lArg1, [out] long *plArg2);
+	};
+

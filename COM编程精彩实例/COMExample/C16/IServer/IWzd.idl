@@ -1,0 +1,15 @@
+// IWzd.idl :  IDL source for the IWzd interface 
+//
+
+// NOTE: no automation declarations--use MFC's built-in support for that
+import "unknwn.idl";
+	[
+		object,
+		uuid(C177116E-9AAA-11D3-805D-000000000000),
+		pointer_default(unique)
+	]
+	interface IWzd : IUnknown
+	{
+		HRESULT Method2([in] long lArg, [in] unsigned long ulArg);
+	};
+

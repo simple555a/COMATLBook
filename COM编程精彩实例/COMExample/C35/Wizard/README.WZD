@@ -1,0 +1,112 @@
+/////////////////////////////////////////////////////////////////////
+// How to pass data between VB and C++ using COM.
+/////////////////////////////////////////////////////////////////////
+
+1) To pass chars, shorts, integers, floats, and doubles into C++:
+In VJ++ use:
+		char byArg='a';
+		short sArg=1234;
+		int lArg=1234567890;
+		float fArg=1.234f;
+		double dArg=1.23456789;
+		wzd.method(byArg,sArg,lArg,fArg, dArg);
+
+In the IDL file for in's and out's use:
+		[in]  char byArg, [in] short sArg, [in] long lArg, [in] float fArg, [in] double dArg
+
+In the .cpp and .h C++ files use:
+		BYTE byArg, short sArg, long lArg, float fArg, double dArg
+		
+2) To get values back from C++:
+In VJ++ use:
+		int lArg1=1234;				  //[in]
+		int lArg2[]=new int[1];		  //[out]
+		int lArg3[]=new int[1];		  //[in,out]
+		lArg3[0]=5678;
+		wzd.method(lArg1, lArg2, lArg3);
+		
+
+In the IDL file for in's and out's use:
+	[in] long lArg1,[out] long *lArg2,[in,out] long *lArg3
+
+In the .cpp and .h C++ files use:
+	long lArg1,long* lArg2,long* lArg3
+
+3) To pass simple arrays:
+In VJ++ use:
+		int lFirst=20;
+		int lLast=23;
+		int lSize=25;
+		int	aArg[]=new int[lSize];
+		wzd.method(lFirst, lLast, lSize, aArg);
+		
+		int lLength=3;
+		wzd.method(lFirst, lLength, lSize, aArg);
+		
+In the IDL file for in's and out's use:
+		[in] long lFirst, [in] long lLast, [in] long lSize, [in,first_is(lFirst),last_is(lLast),size_is(lSize)] long *aArg);
+		[in] long lFirst, [in] long lLength, [in] long lSize, [in,first_is(lFirst),length_is(lLength),size_is(lSize)] long *aArg);
+
+In the .cpp and .h C++ files use:
+	long lFirst, long lLast, long lSize, long *aArg
+	long lFirst, long lLength, long lSize, long *aArg
+
+	where lFirst to lLast is sent and aArg is lSize big
+	      or lFirst and lLength items after are sent
+
+4) To pass strings (BSTR's in C++):
+In VJ++ use:
+		String bstr="Test";
+		String[] pBSTR=new String[1];
+		wzd.method(bstr, pBSTR);
+
+In the IDL file for in's and out's use:
+		[in] BSTR bstr, [out] BSTR *pBSTR
+
+In the .cpp and .h C++ files use:
+		BSTR bstr, BSTR* pBSTR
+
+5) To pass Safearrays use:
+In VJ++ use:
+import com.ms.com.SafeArray;
+	:	:	:
+		SafeArray psa = new SafeArray(Variant.VariantByte,100);
+		psa.setByte(0,(byte)12);
+		wzd.method(psa);
+
+In the IDL file for in's and out's use:
+		[in,out] SAFEARRAY(BYTE) *pSA
+
+In the .cpp and .h C++ files use:
+		SAFEARRAY** pSA
+
+6) To pass Variants:
+In VJ++ use:
+import com.ms.com.Variant;
+		Variant pVAR1=new Variant(1234);
+		Variant pVAR2=new Variant(bstr);
+		Variant pVAR3=new Variant(psa);
+		wzd.method(pVAR1, pVAR2, pVAR3);
+
+In the IDL file for in's and out's use:
+		[in,out] VARIANT *pVAR1,[in,out] VARIANT *pVAR2, [in,out] VARIANT *pVAR3
+
+In the .cpp and .h C++ files use:
+		VARIANT* pVAR1,VARIANT* pVAR2,VARIANT* pVAR3
+
+7) To use a return value:
+In VJ++ use:
+		int retval=wzd.method();
+
+In the IDL file for in's and out's use:
+		[out,retval] long *pVal
+
+In the .cpp and .h C++ files use:
+		long *pVal
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

@@ -1,0 +1,26 @@
+HKCR
+{
+	Scribe.WzdSubscribe.1 = s 'WzdSubscribe Class'
+	{
+		CLSID = s '{94317880-D0FB-11D3-B7BD-000000000000}'
+	}
+	Scribe.WzdSubscribe = s 'WzdSubscribe Class'
+	{
+		CLSID = s '{94317880-D0FB-11D3-B7BD-000000000000}'
+		CurVer = s 'Scribe.WzdSubscribe.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {94317880-D0FB-11D3-B7BD-000000000000} = s 'WzdSubscribe Class'
+		{
+			ProgID = s 'Scribe.WzdSubscribe.1'
+			VersionIndependentProgID = s 'Scribe.WzdSubscribe'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			'TypeLib' = s '{94317871-D0FB-11D3-B7BD-000000000000}'
+		}
+	}
+}

@@ -1,0 +1,93 @@
+/////////////////////////////////////////////////////////////////////
+// How to handle errors.
+/////////////////////////////////////////////////////////////////////
+
+1) To catch thrown COM errors:
+	try
+	{
+		retval=pPtr->Method1(1234);
+	}
+	catch (_com_error &err)
+	{
+		AfxMessageBox(err.ErrorMessage());
+	}
+
+2) Your methods are wrapped when using smart pointers to check for a
+   returned COM failure and throw that error in a _com_error object. You
+   can turn this off by using the raw_interfaces_only keyword with the #import
+   directive or by calling the raw pointer:
+
+	hr=pPtr->raw_Method1(1234,&retval);
+
+	where Method1() is the original method name.
+
+
+3) You can create your own COM error codes, usually in your own errors.h file like so:
+
+#if !defined errors_h
+#define errors_h
+
+const HRESULT WZD_ERROR1 = MAKE_HRESULT(
+							1,				// 1=failure, 0=success
+							FACILITY_ITF, 	// COM errors (can also be FACILITY_WINDOWS for window errors, etc.)
+							0x0400			// user defined 0x400 and above
+							);
+const HRESULT WZD_ERROR2 = MAKE_HRESULT(1, FACILITY_ITF, 0x0401);
+const HRESULT WZD_ERROR3 = MAKE_HRESULT(1, FACILITY_ITF, 0x0402);
+#endif
+
+/////////////////////////////////////////////////////////////////////
+// How to return more error information.
+/////////////////////////////////////////////////////////////////////
+// You can use the COM API's GetErrorInfo() and SetErrorInfo() to create your
+// own descriptive error messages:
+
+1) When creating the COM class using the ATL Object Wizard, specify 
+	"Support ISupportErrorInfo". This just tells a client that this object will
+	be using SetErrorInfo() when an error occurs.
+
+2) When an error occurs, create your own error message like so:
+
+	ICreateErrorInfo *cei;
+	HRESULT hr = CreateErrorInfo(&cei);
+	IErrorInfo *eip;
+	hr = cei->QueryInterface(IID_IErrorInfo, (LPVOID*) &eip);
+	if (!FAILED(hr))
+	{
+		cei->SetDescription(L"Something bad happened.");	// error in human form
+		cei->SetSource(_bstr_t(__FILE__));					// where it happened
+		cei->SetHelpContext(23);							// plug into help file to summon a
+		cei->SetHelpFile(L"help.hlp");						// particular passage	
+		SetErrorInfo(0, eip);
+		eip->Release();
+	}
+	cei->Release();
+
+3) Return a failure:
+		return WZD_ERROR3;
+
+4) In the client you can retrieve this error like so:
+
+	ISupportErrorInfoPtr sei(pPtr);	// where pPtr is the smart pointer for the COM object that had the error
+	hr=sei->InterfaceSupportsErrorInfo(__uuidof(IWzd)); //where IWzd is the interface of that object
+	if (hr==S_OK)
+	{
+		IErrorInfoPtr eip(pPtr);
+		hr = GetErrorInfo(0, &eip);
+		if (!FAILED(hr))
+		{
+			DWORD dwHelpContext;
+			BSTR bstrDescription,bstrSource,bstrHelpFile;
+			eip->GetDescription(&bstrDescription);	// error in english
+			eip->GetSource(&bstrSource);			// where did the error occur
+			eip->GetHelpContext(&dwHelpContext); // plug into help file to summon a
+			eip->GetHelpFile(&bstrHelpFile);		// particular passage
+		}
+	}
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

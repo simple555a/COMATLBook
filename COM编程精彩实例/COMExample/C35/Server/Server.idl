@@ -1,0 +1,47 @@
+// Server.idl : IDL source for Server.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Server.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(C177116E-9AAA-11D3-805D-000000000000),
+		dual,
+		helpstring("IWzd Interface"),
+		pointer_default(unique)
+	]
+	interface IWzd : IDispatch
+	{
+		[id(1), helpstring("method Simple1")] HRESULT Simple1([in]  char byArg, [in] short sArg, [in] long lArg);
+		[id(2), helpstring("method Simple2")] HRESULT Simple2([in] float fArg, [in] double dArg);
+		[id(3), helpstring("method Simple3")] HRESULT Simple3([in] long lArg1,[out] long *lArg2,[in,out] long *lArg3);
+		[id(4), helpstring("method Array1")] HRESULT Array1([in] long lFirst, [in] long lLast, [in] long lSize, [in,first_is(lFirst),last_is(lLast),size_is(lSize)] long *aArg);
+		[id(5), helpstring("method Array2")] HRESULT Array2([in] long lFirst, [in] long lLength, [in] long lSize, [in,first_is(lFirst),length_is(lLength),size_is(lSize)] long *aArg);
+		[id(6), helpstring("method VBVars1")] HRESULT VBVars1([in] BSTR bstr, [out] BSTR *pBSTR);
+		[id(7), helpstring("method VBVars2")] HRESULT VBVars2([in,out] SAFEARRAY(BYTE) *pSA);
+		[id(8), helpstring("method VBVars3")] HRESULT VBVars3([in,out] VARIANT *pVAR1,[in,out] VARIANT *pVAR2, [in,out] VARIANT *pVAR3);
+		[id(9), helpstring("method VBVars4")] HRESULT VBVars4([out,retval] long *pVal);
+	};
+
+[
+	uuid(C1771162-9AAA-11D3-805D-000000000000),
+	version(1.0),
+	helpstring("Server 1.0 Type Library")
+]
+library SERVERLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(C177116F-9AAA-11D3-805D-000000000000),
+		helpstring("Wzd Class")
+	]
+	coclass Wzd
+	{
+		[default] interface IWzd;
+	};
+};

@@ -1,0 +1,39 @@
+// EventCls.idl : IDL source for EventCls.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (EventCls.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(9431786B-D0FB-11D3-B7BD-000000000000),
+		dual,
+		helpstring("IWzdCall Interface"),
+		pointer_default(unique)
+	]
+	interface IWzdCall : IDispatch
+	{
+		[id(1), helpstring("method WzdEvent")] HRESULT WzdEvent([in] long lArg);
+	};
+
+[
+	uuid(94317850-D0FB-11D3-B7BD-000000000000),
+	version(1.0),
+	helpstring("EventCls 1.0 Type Library")
+]
+library EVENTCLSLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(9431786C-D0FB-11D3-B7BD-000000000000),
+		helpstring("WzdCall Class")
+	]
+	coclass WzdCall
+	{
+		[default] interface IWzdCall;
+	};
+};

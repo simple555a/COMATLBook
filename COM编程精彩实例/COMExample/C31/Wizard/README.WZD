@@ -1,0 +1,387 @@
+/////////////////////////////////////////////////////////////////////
+// How to pass data between C++ COM client and server.
+/////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////  SIMPLE DATA TYPES ////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+1) To pass chars, shorts, unsigned shorts, longs, unsigned longs, enumerations, floats, and doubles:
+In client use:
+	char cArg='A'; //assumed to be unsigned
+	short sArg=1234;
+	unsigned short usArg=40000;
+	workday enumArg=Wednesday;
+	long lArg=12345678L;
+	unsigned long ulArg=4026531840L;
+	float fArg=1234.0f;
+	double dArg=12345678.0;
+
+	wzd->method(cArg,sArg, usArg, enumArg, lArg, ulArg, fArg, dArg);
+
+In the IDL file for in's and out's use:
+
+// enumerator (above any interface definitions)
+typedef enum {Monday=2, Tuesday, Wednesday, Thursday, Friday} workday;
+	:	:	:
+	[in] unsigned char cArg, [in] short sArg, [in] unsigned short usArg, [in] workday enumArg, [in] long lArg, [in] unsigned long ulArg,[in] float fArg, [in] double dArg
+
+In the server use:
+unsigned char cArg, short sArg, unsigned short usArg, workday enumArg,long lArg, unsigned long ulArg, float fArg, double dArg
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////  SIMPLE TYPES NOT SUPPORTED BY LATE BINDING ///////////////////
+////////////////////////////////////////////////////////////////////////////////
+2) To pass simple variable types not supported by VB or VJ++ (late binding):
+In client use:
+	bool bArg=TRUE;
+	BYTE byArg=12;
+	hyper yArg=1234567890123456;  //(int64)
+	unsigned hyper uyArg=1234567890123;
+
+	wzd->method(bArg, byArg, yArg, uyArg);
+
+
+In the IDL file for in's and out's use:
+	[in] boolean bArg, [in] byte byArg, [in] hyper yArg, [in] unsigned hyper uyArg
+
+
+In the server use:
+	boolean bArg, byte byArg, hyper yArg, unsigned hyper uyArg
+
+////////////////////////////////////////////////////////////////////////////////
+///////////////  FUN WITH in and out ///////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+3) To pass and receive simple types:
+In client use:
+	long lArg1=123;	// 123 will be passed to method but lArg1 will not receive anything back
+	long lArg2=456; // 456 will be not be passed to method, but will be overwritten by method on return
+	long lArg3=789; // 789 will be passed to method and will also be overwritten by value returned by method
+
+	pPtr->Simple5(lArg1,&lArg2,&lArg3); //note that returned arguments must pass their addresses
+
+
+In the IDL file for in's and out's use:
+	[in] long lArg1,[out] long *lArg2,[in,out] long *lArg3
+
+In the server use:
+	long lArg1,long* lArg2,long* lArg3
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////  SIMPLE ARRAYS /////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+4) To pass simple arrays (simple arrays don't work with late binding--use safearrays instead)
+In client use:
+
+	//simple array
+	long aArg[ARRAYSIZE];
+	pPtr->Array1(aArg);
+
+	// variable sized (one dimension only)(variable length specified with [] or [*])
+	long lSize=ARRAYSIZE;
+	long vArg[ARRAYSIZE][5];
+	pPtr->Array2(
+			lSize,		// size of second row of array
+			(long **)vArg		// array
+			);
+
+	// to specify only a certian part of array needs to be xmitted/received (whole array still allocated in destination)
+	long lFirst=20;
+	long lLast=23;
+	pPtr->Array3(
+			lFirst, 	// first element to transmit
+			lLast, 		// last element to transmit
+			lSize,
+			aArg);		// array to transmit
+
+	long lLength=4;
+	pPtr->Array4(
+			lFirst,		// first element to transmit
+			lLength,	// number of elements to transmit starting at lFirst
+			lSize,
+			aArg);		// array to transmit
+
+
+In the IDL file for in's and out's use:
+		[id(6), helpstring("method Array1")] HRESULT Array1([in] long aArg[25]);
+		[id(7), helpstring("method Array2")] HRESULT Array2([in] long lSize, [in,size_is(lSize)] long aArg[][5]);
+		[id(8), helpstring("method Array3")] HRESULT Array3([in] long lFirst, [in] long lLast, [in] long lSize, [in,first_is(lFirst),last_is(lLast),size_is(lSize)] long *aArg);
+		[id(9), helpstring("method Array4")] HRESULT Array4([in] long lFirst, [in] long lLength, [in] long lSize, [in,first_is(lFirst),length_is(lLength),size_is(lSize)] long *aArg);
+
+
+In the server use:
+STDMETHODIMP CWzd::Array1(long aArg[25])
+STDMETHODIMP CWzd::Array2(long lSize, long aArg[][5])
+{
+	for (int i=0;i<lSize;i++)
+	{
+		int j=aArg[i][0];
+	}
+	return S_OK;
+}
+STDMETHODIMP CWzd::Array3(long lFirst, long lLast, long lSize, long *aArg)
+{
+	for (int i=lFirst;i<=lLast;i++)
+	{
+		int j=aArg[i];
+	}
+	return S_OK;
+}
+STDMETHODIMP CWzd::Array4(long lFirst, long lLength, long lSize, long *aArg)
+{
+	for (int i=lFirst;i<(lFirst+lLength);i++)
+	{
+		int j=aArg[i];
+	}
+	return S_OK;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////// STRUCTURES AND COM CLASSES //////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+5) To pass structres and COM class pointers (structures don't work with late binding):
+In client use:
+	MYSTRUCT myStruct;
+	myStruct.pPointer=new long[12]; // All embedded pointers must receive a valid
+									// pointer or a NULL before it can be transmitted
+	myStruct.pPointer[3]=1234;
+	pPtr->Structs1(myStruct,pPtr.GetInterfacePtr());
+
+
+In the IDL file for in's and out's use:
+// define structure above any interface definitions:
+typedef struct 
+{
+	long lElement;
+	long *pPointer;
+	float fElement;
+} MYSTRUCT;
+	:	:	:
+	[in] MYSTRUCT myStruct, [in] IUnknown *myClass
+
+In the server use:
+STDMETHODIMP CWzd::Structs1(MYSTRUCT myStruct, IUnknown *myClass)
+{
+	IWzd *pWzd=(IWzd*)myClass;
+	return S_OK;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////  ENCAPSULATED UNIONS  /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+6) To pass encapsulated unions (encapsulated unions don't work with late binding--use variants instead)
+In client use:
+
+	MYEUNION myEUnion;
+	long lType=1;
+	myEUnion.fFloat[0]=123.0f;
+	
+	pPtr->EUnions1(lType,myEUnion);
+
+
+In the IDL file for in's and out's use:
+// define above any interface definitions:
+typedef [switch_type(long)] union //"switch_type()" makes switch is a "long"
+{
+	[case(1)] 
+		float fFloat[2]; 
+	[case(25)] 
+		double dDouble; 
+	[case(27)]
+		MYSTRUCT myStruct;
+	[default] 
+    	long lLong; 
+} MYEUNION;
+	:	:	:
+		[in] long lType, [in,switch_is(lType)] MYEUNION myEUnion
+
+In the server use:
+STDMETHODIMP CWzd::EUnions1(long lType, MYEUNION myEUnion)
+{
+	if (lType==1)
+		float f=myEUnion.fFloat[0];
+
+	return S_OK;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////// PASSING MEMORY POINTERS ///////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+7) To pass memory pointers:
+In client use:
+// NOTE: Memory allocated with ::CoTaskMemAlloc() can be safely deallocated 
+//	by any COM server using ::CoTaskMemDealloc(). It's also thread safe (no two 
+//  threads can write to its pointer at the same time.
+
+	// allocate a structure
+	// NOTE: Cannot use LPVOID--proxy will need to know exactly how big the
+	//		data item is that this pointer points to.
+	MYSTRUCT *pMyStruct=(MYSTRUCT*)::CoTaskMemAlloc(
+								sizeof(MYSTRUCT)		//number of bytes to allocate
+							 	);
+
+	// [ref] Fastest COM access to a pointer: 
+	// the server may change the contents of pMyStruct, but promises not to dealloc 
+	// or otherwise change the pointer so COM doesn't have to keep track of it
+	pPtr->MemPtr1(pMyStruct);
+
+	// [unique] Medium COM access to a pointer: 
+	// the server can deallocate the memory this pointer points to, but there is only 
+	// one pointer to this particular memory in this call
+	pPtr->MemPtr2(&pMyStruct);
+
+	// [ptr] Slowest COM access to a pointer: 
+	// there are two pointers into pMyStruct, and the server can use either 
+	// to modify its contents
+	MYSTRUCT *pMyStruct2=pMyStruct;
+	pPtr->MemPtr3(&pMyStruct,&pMyStruct2);
+
+	MYSTRUCT *pReturned;
+	pPtr->MemPtr4(
+			NULL,			// all input and/or output pointers must be 
+			&pReturned);	// assigned a valid pointer or NULL!
+
+
+In the IDL file for in's and out's use:
+	HRESULT MemPtr1([in,ref] MYSTRUCT *pStruct);
+	HRESULT MemPtr2([in,out,unique] MYSTRUCT **pPtr);
+	HRESULT MemPtr3([in,out,ptr] MYSTRUCT **pPtr1,[in,out,ptr] MYSTRUCT **pPtr2);
+	HRESULT MemPtr4([in,out] MYSTRUCT **pPtr1,[in,out] MYSTRUCT **pPtr2);
+
+In the server use:
+STDMETHODIMP CWzd::MemPtr1(MYSTRUCT *pStruct)
+{
+	return S_OK;
+}
+STDMETHODIMP CWzd::MemPtr2(MYSTRUCT **pPtr)
+{
+	::CoTaskMemFree(*pPtr);
+	*pPtr=(MYSTRUCT*)::CoTaskMemAlloc(
+								sizeof(MYSTRUCT)		//number of bytes to allocate
+							 	);
+
+	return S_OK;
+}
+STDMETHODIMP CWzd::MemPtr3(MYSTRUCT **pStruct1,MYSTRUCT **pStruct2)
+{
+	(*pStruct1)->lElement=123;
+	(*pStruct2)->lElement=456;
+	return S_OK;
+}
+STDMETHODIMP CWzd::MemPtr4(MYSTRUCT **pStruct1,MYSTRUCT **pStruct2)
+{
+	return S_OK;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///////////  BSTR's, SAFEARRAY's and VARIANT's /////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+8) To pass BSTR's SAFEARRAY's, VARIANT's and return values (VB inspired types)
+In client use:
+// BSTR type (binary string) equivalent to Visual Basic string
+	// convert asciiz to BSTR using C++ class "_bstr_t"
+	_bstr_t bstrtMyString1("MyString");
+	BSTR bstrMyString2=NULL;
+
+	// make the call
+	pPtr->VBVars1(bstrtMyString1,&bstrMyString2);
+
+	// convert BSTR from unicode to asciiz using W2A() macro
+	USES_CONVERSION;
+	char *pStr = (char*)W2A(bstrMyString2);
+
+	// make same conversion using %S printf format
+	CString str;
+	str.Format("%S",bstrMyString2);
+
+// SAFEARRAY type equivalent to a Visual Basic array
+	// create safearray and initialize with data
+	SAFEARRAY *saMySafeArray=
+		::SafeArrayCreateVector( 
+					VT_UI1,	// type (VT_UI1 == one byte unsigned integers (bytes)
+					0,		// lower index of array (can be negative)
+					100);	// size
+	LPBYTE lpByte=NULL;
+	::SafeArrayAccessData(
+			saMySafeArray,	//safearray vector from above
+			(LPVOID*)&lpByte);		//pointer
+	lpByte[0]=12;
+	lpByte[1]=34;
+	::SafeArrayUnaccessData(
+			saMySafeArray);	//safearray vector from above
+
+	// make the call
+	pPtr->VBVars2(&saMySafeArray);
+
+	// retrieve the data
+	::SafeArrayAccessData(
+			saMySafeArray,	//safearray vector from above
+			(LPVOID*)&lpByte);		//pointer
+	BYTE by=lpByte[0];
+	::SafeArrayUnaccessData(
+			saMySafeArray);	//safearray vector from above
+
+	// destroy the safe array
+	::SafeArrayDestroy(saMySafeArray);
+
+
+// VARIANT type equivalent to an untyped Visual Basic variable
+	// convert a variable to a variant using the C++ class "_variant_t"
+	long lLong=14;
+	bstrtMyString1=L"test"; //reusing a _bstr_t class
+	_variant_t vartMyVariant1(lLong);
+	_variant_t vartMyVariant2(bstrtMyString1);
+
+	// convert a safearray to a variant using V_xxx macros (other types can be found in OLEAUTO.H)
+	saMySafeArray=::SafeArrayCreateVector( VT_UI1,0,100);
+	VARIANT varMyVariant3;
+	VariantInit(&varMyVariant3); //initialize to no type
+	V_VT(&varMyVariant3)= VT_ARRAY | VT_UI1;
+	V_ARRAY(&varMyVariant3)=saMySafeArray;
+
+	// make the call
+	pPtr->VBVars3(&vartMyVariant1,&vartMyVariant2,&varMyVariant3);
+
+	// convert a variant back to a variable using "_variant_t"
+	lLong=long(vartMyVariant1);
+	bstrtMyString1=_bstr_t(vartMyVariant2);
+
+	// convert safearrays using V_xxx macros (other types can be found in OLEAUTO.H)
+	if (V_VT(&varMyVariant3)==(VT_ARRAY | VT_UI1))
+		saMySafeArray=V_ARRAY(&varMyVariant3);
+	::SafeArrayDestroy(saMySafeArray);
+
+// RETVAL type equivalent to the value returned by a function.
+	// (the retval in the following example:  retval=func(val1,val2);)
+	// (the trick is in the "retval" variable attribute in the IDL file and the wrapper
+	//   that #import puts around IWzdPtr method calls)
+	long val=pPtr->VBVars4();
+
+	// same exact method call without the IWzdPtr wrapper method
+	pPtr->raw_VBVars4(&val);
+
+In the IDL file for in's and out's use:
+	HRESULT VBVars1([in] BSTR bstr, [out] BSTR *pBSTR);
+	HRESULT VBVars2([in,out] SAFEARRAY(BYTE) *pSA);
+	HRESULT VBVars3([in,out] VARIANT *pVAR1,[in,out] VARIANT *pVAR2,[in,out] VARIANT *pVAR3);
+	HRESULT VBVars4([out,retval] long *pVal);
+
+In the server use:
+BSTR bstr, BSTR* pBSTR
+SAFEARRAY** pSA
+VARIANT* pVAR1,VARIANT* pVAR2,VARIANT* pVAR3
+long *pVal
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

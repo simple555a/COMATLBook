@@ -1,0 +1,39 @@
+// WzdSrv.idl : IDL source for WzdSrv.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (WzdSrv.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(4832AABE-AB3F-11D3-8081-000000000000),
+		dual,
+		helpstring("IWzd Interface"),
+		pointer_default(unique)
+	]
+	interface IWzd : IDispatch
+	{
+		[id(1), helpstring("method Method1")] HRESULT Method1([in] long lArg);
+	};
+
+[
+	uuid(4832AAB2-AB3F-11D3-8081-000000000000),
+	version(1.0),
+	helpstring("WzdSrv 1.0 Type Library")
+]
+library WZDSERVICELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(4832AABF-AB3F-11D3-8081-000000000000),
+		helpstring("Wzd Class")
+	]
+	coclass Wzd
+	{
+		[default] interface IWzd;
+	};
+};

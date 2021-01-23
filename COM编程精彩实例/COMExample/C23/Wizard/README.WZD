@@ -1,0 +1,21 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create the COM class as usual using the ATl Object Wizard.
+
+
+2) Add the following macro to this class's new .h file just above the 
+DECLARE_REGISTRY_RESOURCEID macro:
+
+DECLARE_CLASSFACTORY_SINGLETON(CWzd)
+
+where CWzd is the name of the class.
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

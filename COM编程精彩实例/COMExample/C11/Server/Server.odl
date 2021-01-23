@@ -1,0 +1,70 @@
+// Server.odl : type library source for Server.exe
+
+// This file will be processed by the MIDL compiler to produce the
+// type library (Server.tlb).
+
+[ uuid(37D93328-A706-11D3-A398-00C04F570E2C), version(1.0) ]
+library Server
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+	//  Primary dispatch interface for CServerDoc
+	
+	[ uuid(37D93329-A706-11D3-A398-00C04F570E2C) ]
+	dispinterface IServer
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CServerDoc)
+			//}}AFX_ODL_PROP
+			
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CServerDoc)
+			//}}AFX_ODL_METHOD
+
+	};
+
+	//  Class information for CServerDoc
+	
+	[ uuid(37D93327-A706-11D3-A398-00C04F570E2C) ]
+	coclass Document
+	{
+		[default] dispinterface IServer;
+	};
+
+
+	//  Primary dispatch interface for CWzdSrv
+	
+	[ uuid(37D93340-A706-11D3-A398-00C04F570E2C) ]
+	dispinterface IWzdSrv
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CWzdSrv)
+			//}}AFX_ODL_PROP
+			
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CWzdSrv)
+			//}}AFX_ODL_METHOD
+
+	};
+
+	//  Class information for CWzdSrv
+
+	[ uuid(4487D432-A6FF-11D3-A398-00C04F570E2C) ]
+	coclass WzdSrv
+	{
+		[default] dispinterface IWzdSrv;
+	};
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};

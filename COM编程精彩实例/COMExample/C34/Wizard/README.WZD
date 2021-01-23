@@ -1,0 +1,89 @@
+/////////////////////////////////////////////////////////////////////
+// Files for an ATL Collection Server
+/////////////////////////////////////////////////////////////////////
+
+CollSrv.cpp
+CollSrv.def
+CollSrv.dsp
+CollSrv.dsw
+CollSrv.idl
+CollSrv.rc
+ColSrvps.def
+ColSrvps.mk
+resource.h
+StdAfx.cpp
+StdAfx.h
+WzdColl.cpp
+WzdColl.h
+WzdColl.rgs
+
+
+/////////////////////////////////////////////////////////////////////
+// How to store data in the ATL Collection server from your server.
+/////////////////////////////////////////////////////////////////////
+
+1) Specify the collection argument in your IDL file as:
+
+	[out] LPUNKNOWN *iCollection
+
+2) Create the collection server and initialize it to the number of objects it will contain:
+	IWzdCollectionPtr pPtr;
+	pPtr.CreateInstance(__uuidof(WzdCollection));
+	pPtr->Init(
+			3		// number of objects to add
+			);
+
+3) Add those object to the collection:
+	for (int i=0;i<3;i++)
+	{
+		// create object (safearray, BSTR, etc.)
+		LPBYTE lpByte;
+		SAFEARRAY *pSA=::SafeArrayCreateVector(VT_UI1,0,10);
+		::SafeArrayAccessData(pSA,(LPVOID*)&lpByte);
+		lpByte[0]=(BYTE)i;
+		::SafeArrayUnaccessData(pSA);
+		pPtr->Add(&pSA);
+	}
+
+4) When finished, return the collection by detaching it from the smart pointer,
+   otherwise the smart pointer will release it when it's destroyed:
+
+	*pCollection=pPtr.Detach();
+
+
+/////////////////////////////////////////////////////////////////////
+// How to access the collection server from VB.
+/////////////////////////////////////////////////////////////////////
+
+1) Add both the collection server and your server COM class to the VB project using
+   the "Project/Reference" menu items:
+
+2) Create the server as usual:
+
+    Dim IWzdSrv As Object
+    Set IWzdSrv = CreateObject("Server.Wzd")
+
+3) Define the collection server:
+    Dim MyCollection As WzdCollection
+
+4) Define a variable that will contain each object as it comes out of the collection:
+    Dim MyObject
+
+5) Use your server to get the collection server (and its contents):
+    rVal = IWzdSrv.GetCollection(MyCollection)
+
+6) To get the first item in the collection:
+    MyObject = MyCollection.Item(0)
+
+7) To loop through all the objects in the collection:
+    For Each MyObject In MyCollection
+        ' use MyObject, which could be a safearray, BSTR, etc.
+    Next
+
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

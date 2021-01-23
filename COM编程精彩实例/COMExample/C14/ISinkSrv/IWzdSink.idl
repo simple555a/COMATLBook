@@ -1,0 +1,15 @@
+// IWzdSink.idl :  IDL source for the IWzdSink interface 
+//
+
+// NOTE: no automation declarations--use MFC's built-in support for that
+import "unknwn.idl";
+	[
+		object,
+		uuid(20050FE0-A719-11d3-A398-00C04F570E2C),
+		pointer_default(unique)
+	]
+	interface IWzdSink : IUnknown
+	{
+		HRESULT Callback([in] long lArg);
+	};
+

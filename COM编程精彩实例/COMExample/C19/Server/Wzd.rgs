@@ -1,0 +1,24 @@
+HKCR
+{
+	Server.Wzd.1 = s 'Wzd Class'
+	{
+		CLSID = s '{351495D1-AA6D-11D3-807E-000000000000}'
+	}
+	Server.Wzd = s 'Wzd Class'
+	{
+		CLSID = s '{351495D1-AA6D-11D3-807E-000000000000}'
+		CurVer = s 'Server.Wzd.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {351495D1-AA6D-11D3-807E-000000000000} = s 'Wzd Class'
+		{
+			ProgID = s 'Server.Wzd.1'
+			VersionIndependentProgID = s 'Server.Wzd'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			val AppID = s '{C5B26A91-AB32-11D3-8080-000000000000}'
+			'TypeLib' = s '{C5B26A90-AB32-11D3-8080-000000000000}'
+		}
+	}
+}

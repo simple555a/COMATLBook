@@ -1,0 +1,60 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Write your MFC COM class as usual.
+
+2) To the top of the .h file of this COM class, add your own definitions for the
+   MFC OLE macros DECLARE_OLECREATE and IMPLEMENT_OLECREATE. We do this because
+   the class name it uses for COleObjectFactory is hard coded and we can't get to
+   it otherwise to specify our own class name:
+
+/////////////////////////////////////////////////////////////////////////////
+// Implement our own DECLARE_OLECREATE macros
+class CWzdOleObjectFactory;
+
+#define DECLARE_OLECREATE_WZD(class_name) \
+public: \
+	static AFX_DATA CWzdOleObjectFactory factory; \
+	static AFX_DATA const GUID guid; \
+
+#define IMPLEMENT_OLECREATE_WZD(class_name, external_name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
+	AFX_DATADEF CWzdOleObjectFactory class_name::factory(class_name::guid, \
+		RUNTIME_CLASS(class_name), FALSE, _T(external_name)); \
+	AFX_COMDAT const AFX_DATADEF GUID class_name::guid = \
+		{ l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }; \
+
+3) Substitute these macros for the current macros. In the .h file, find the DECLARE_OLECREATE
+   macro and rename it to DECLARE_OLECREATE_WZD. In the .cpp file, it's the IMPLEMENT_OLECREATE
+   macro for the IMPLEMENT_OLECREATE_WZD macro.
+
+4) Implement this new derivation of COleObjectFactory at the bottom of this .h file:
+/////////////////////////////////////////////////////////////////////////////
+// Implement our own derivation of COleObjectFactory class factory
+class CWzdOleObjectFactory : public COleObjectFactory
+{
+public:
+	CWzdOleObjectFactory( REFCLSID clsid, CRuntimeClass* pRuntimeClass, 
+		BOOL bMultiInstance, LPCTSTR lpszProgID ) :
+			COleObjectFactory(clsid,pRuntimeClass,bMultiInstance,lpszProgID)
+			{};
+
+	// singleton version of CreateInstance
+	CCmdTarget *OnCreateObject()
+	{
+	// return static singleton object
+		static CWzdSrv wzd;
+		return &wzd;
+	}
+};
+
+5) Override COleObjectFactory's OnCreateObject() method to return a single, static
+instance of our COM class. We need to do this at the bottom of the .h file after the
+COM class has been defined.
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

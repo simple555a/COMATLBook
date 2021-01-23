@@ -1,0 +1,42 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Tester - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP6B.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "_WIN32_DCOM" /FR"Debug/" /Fp"Debug/Tester.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"F:\C++电子书\9927417COMProgrammingExample\COMExample\C1\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP6B.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP6C.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "_WIN32_DCOM" /FR"Debug/" /Fp"Debug/Tester.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"F:\C++电子书\9927417COMProgrammingExample\COMExample\C1\Tester.cpp"
+"F:\C++电子书\9927417COMProgrammingExample\COMExample\C1\TestDlg.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP6C.tmp" 
+<h3>Output Window</h3>
+Compiling...
+StdAfx.cpp
+Compiling...
+Tester.cpp
+TestDlg.cpp
+Generating Code...
+Creating command line "link.exe /nologo /subsystem:windows /incremental:yes /pdb:"Debug/Tester.pdb" /debug /machine:I386 /out:"Debug/Tester.exe" /pdbtype:sept  ".\Debug\StdAfx.obj" ".\Debug\Tester.obj" ".\Debug\TestDlg.obj" ".\Debug\Tester.res" ".\SERVER\Debug\Server.lib" "
+<h3>Output Window</h3>
+Linking...
+Creating command line "bscmake.exe /nologo /o"Debug/Tester.bsc"  ".\Debug\StdAfx.sbr" ".\Debug\Tester.sbr" ".\Debug\TestDlg.sbr""
+Creating browse info file...
+<h3>Output Window</h3>
+
+
+
+<h3>Results</h3>
+Tester.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,62 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object.
+/////////////////////////////////////////////////////////////////////
+// This only applies to in-process COM objects. All out-of-process objects
+// are marshelled no matter what. With in-process COM objects, you should never simply 
+// pass a COM object pointer to another function, especially not to another thread. 
+// Some COM objects have their own built-in protection again multiple access to their data
+// with threading, but others depend on COM to protect them through marshelling. By using the
+// two COM API functions shown below, a COM object pointer that wasn't marshelled before
+// will be marshelled if COM determines it's required based on thread model type and
+// what thread the new function is in. Please see the book for more.
+
+1) To pass the COM object pointer, use :CoMarshelInterThreadInterfaceInStream()
+   to put it in stream format:
+
+	LPSTREAM lpStream=NULL;
+	hr=::CoMarshalInterThreadInterfaceInStream(
+			__uuidof(IWzd),			//identifier of the interface
+			pPtr.GetInterfacePtr(), //interface to be marshaled
+			&lpStream				//stream
+			);
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+2) The lpStream variable can now be passed freely to a function in any thread:
+
+	m_ThreadData.lpStream=lpStream;
+	AfxBeginThread(
+		WzdThrd,				// static thread process declare (UINT WzdThrd( LPVOID pParam );)
+		&m_ThreadData);			// data to send to thread
+
+3) In the called function, you can extract the COM object pointer with:
+
+	// every thread in process requires CoInit
+	::CoInitializeEx(NULL,COINIT_APARTMENTTHREADED);
+
+	LPUNKNOWN p;
+	HRESULT hr=::CoGetInterfaceAndReleaseStream(
+			pData->lpStream,	//stream 
+			__uuidof(IWzd),		//identifier of the interface
+			(LPVOID*)&p);
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return 0;
+	}
+
+4) The pointer comes out as an LPUNKNOWN, so stick it in a smart pointer with:
+	IWzdPtr pPtr(p);
+
+5) The COM object may or may not be marshelled.
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

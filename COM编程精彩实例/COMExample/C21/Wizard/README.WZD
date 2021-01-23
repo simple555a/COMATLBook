@@ -1,0 +1,92 @@
+/////////////////////////////////////////////////////////////////////
+// How to modify the COM interface.
+/////////////////////////////////////////////////////////////////////
+
+1) To add new methods and properties to a COM class, you can continue to 
+   update it through the ClassView tab in the Workspace View by right
+   clicking on the interface name and picking Method or Property.
+
+2) You must manually modify or remove an existing method or property. Make
+   sure to not only edit the IDL file but also the COM class's .cpp and .h
+   file. Also make sure the prototype is the same in all places. You WILL
+   NOT get an accurate compile time error when they don't match. Instead you
+   will get the vague error that the ATL class can't be instantiated.
+
+/////////////////////////////////////////////////////////////////////
+// How to extend a COM interface.
+/////////////////////////////////////////////////////////////////////
+ When you want to add new or modified methods to an established COM class,
+ you should extend it instead of modifying the old class. That way older clients
+ can still access the old functionality while the new client can access the
+ new interface.
+
+1) The old ATL server and COM class should have been created as usual with the
+   wizards. 
+
+2) Modify the old COM class's .h file to split up its class into a base class
+   and a derived class (this is to prevent link errors later):
+
+	a) Change the class name from, as an example, CWzd to CWzdBase.
+	b) Create a new class called CWzd at the bottom of the .h file as follows:
+
+		// new class
+		class CWzd :
+			public CWzdBase,
+			public CComCoClass<CWzd, &CLSID_Wzd>
+		{
+		public:
+
+		DECLARE_REGISTRY_RESOURCEID(IDR_WZD)
+		};
+
+	c) In the old class definition, comment out the CComCoClass<> in the
+	   derivations.
+	d) In the old class definition, comment out the 
+			DECLARE_REGISTRY_RESOURCEID(IDR_WZD) macro.
+
+3) Add the new COM class to this server as usual using the ATL Object Wizard. 
+   In this example we name it CWzdEx.
+
+4) Modify the new class's .h file as follows:
+	a) Replace the CComObjectRootEx<> in the derivation to your CWzdBase class.
+	b) In the interface map, replace COM_INTERFACE_ENTRY(IDispatch) with 
+			COM_INTERFACE_ENTRY2(IDispatch, IWzdEx)
+	c) Add a chaining macro to the bottom of the map to chain this interface
+	   with the COM class we're extending:
+
+			COM_INTERFACE_ENTRY_CHAIN(CWzdBase)
+
+5) Since this new class is derived from the old class, you can now
+   use any or all of the old class's methods in your new class, perhaps
+   even passing an entire method to the base class.
+
+/////////////////////////////////////////////////////////////////////
+// How to use the class extension.
+/////////////////////////////////////////////////////////////////////
+
+1) Create the extended COM class as usual using smart pointers:
+
+	IWzdExPtr pWzdEx;
+	HRESULT hr=pWzdEx.CreateInstance(__uuidof(WzdEx));
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+	pWzdEx->Method2(4321);
+
+2) To access the methods of the class we extended, use smart pointers to
+   query for its interface.
+
+	IWzdPtr pWzd1(pWzdEx);
+	pWzd1->Method1(1234);
+
+3) Note that you CANNOT go backwards--upon creating the old class you can't
+   get a pointer to the interface of the new class.
+   
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

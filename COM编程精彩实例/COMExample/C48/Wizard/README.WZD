@@ -1,0 +1,29 @@
+// Mostly used with COm classes that use the "Both" threading model to
+// prevent COM from ever marshelling the interface.
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object in ATL
+/////////////////////////////////////////////////////////////////////
+
+1) Create the ATL server as usual with the ATL AppWizard.
+
+2) Create the ATL COM class as usual with the ATL Object Wizard, except
+   on the second tab make sure to specify "Free Threaded Marsheller".
+
+3) That's it--this object will only be marshelled if it's out-of-process.
+
+/////////////////////////////////////////////////////////////////////
+// How to write the COM object in MFC
+/////////////////////////////////////////////////////////////////////
+
+1) Follow the example for aggregation, except the COM class you'll be
+   aggregating is a system COM class. Therefore, at the point where
+   you would use ::CoCreateInstance() to create the object to aggregate, use
+   ::CoCreateFreeThreadedMarsheller(GetControllingUnknown,&pUnknown);
+
+2) That's it--this object will only be marshelled if it's out-of-process.
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

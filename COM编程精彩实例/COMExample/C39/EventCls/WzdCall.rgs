@@ -1,0 +1,26 @@
+HKCR
+{
+	EventCls.WzdCall.1 = s 'WzdCall Class'
+	{
+		CLSID = s '{9431786C-D0FB-11D3-B7BD-000000000000}'
+	}
+	EventCls.WzdCall = s 'WzdCall Class'
+	{
+		CLSID = s '{9431786C-D0FB-11D3-B7BD-000000000000}'
+		CurVer = s 'EventCls.WzdCall.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {9431786C-D0FB-11D3-B7BD-000000000000} = s 'WzdCall Class'
+		{
+			ProgID = s 'EventCls.WzdCall.1'
+			VersionIndependentProgID = s 'EventCls.WzdCall'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			'TypeLib' = s '{94317850-D0FB-11D3-B7BD-000000000000}'
+		}
+	}
+}

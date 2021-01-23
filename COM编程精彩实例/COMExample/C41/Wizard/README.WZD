@@ -1,0 +1,226 @@
+/////////////////////////////////////////////////////////////////////
+// How to use the ADO COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Call the following to initialize the COM for your main process _and_ 
+   call from any thread that will be using COM:
+
+	::CoInitializeEx(
+		NULL,				//always NULL
+		COINIT_APARTMENTTHREADED	//see book about threading models
+		);
+
+	NOTE: You also need to add _WIN32_DCOM to your project settings under 
+	"Preprocessor definitions" in order to get the prototype definition for
+	::CoInitializeEx() included in your compile.
+
+2) Import the ADO class definitions into any source file that will be using ADO:
+
+#import "c:\Program files\Common files\System\ADO\MSADO15.dll" rename("EOF", "_EOF")
+using namespace ADODB;
+
+3) Start by creating the ADO COM objects for connecting and issuing commands to 
+   the data source:
+	_CommandPtr command(__uuidof(Command));
+	_ConnectionPtr connection(__uuidof(Connection));	
+
+4) To open a data source connection use:
+// initialize connection object
+	connection->PutConnectionTimeout(
+				1000		//default is DEFAULT_DBCONNECTPROP
+				);
+
+// open connection to db	
+	connection->Open(
+				L"WZDDB",			// connection string DSN (other ex:"MSOracle8") 
+				L"",				// user id
+				L"",				// password
+				adCmdUnspecified
+				); 	
+
+// initialize command object
+	command->PutRefActiveConnection(connection);
+
+5) To close the data source connection:
+	connection->Close();
+
+
+6) To get a record set from the data source using SQL use:
+	_RecordsetPtr rs(__uuidof(Recordset));
+
+// specify SQL command
+	// *NOTE: SQL will not retrieve blobs--must use Stored Procedure
+	command->PutCommandText(L"SELECT * FROM CUSTOMERS");
+	command->PutCommandType(adCmdText);	// what text in command specifies. also:
+									  // adCmdStoredProc - stored procedure
+							   		  // adCmdTable - table name
+							   		  // adCmdFile - file name
+							   		  // adCmdTableDirect - 
+							   		  // adCmdUnknown - unknown
+
+// open record set
+	rs->Open((_Command*)command, 				// source of record set--can be a SQL statement, etc.--see last param
+			vtMissing, 				// active connection object (optional)
+			adOpenForwardOnly,		// cursor type. also:
+										 // adOpenForwardOnly 
+										 //	adOpenKeyset Opens a keyset-type cursor. 
+										 //	adOpenDynamic Opens a dynamic-type cursor. 
+										 //	adOpenStatic Opens a static type cursor. 
+			adLockOptimistic, 		// record set locking type. also:
+										// adLockReadOnly -- read only
+										// adLockPessimistic --lock records at the data source when editing
+										// adLockOptimistic -- lock records only when you call the Update method. 
+										// adLockBatchOptimistic -- same as above, used with batch mode
+			adCmdUnspecified		// define source param--here we can use a command object. also:
+											// adCmdText indicates source is a SQL statement
+											// adCmdTable indicates source is a table name. 
+											// adCmdStoredProc indicates source as a stored procedure. 
+											// adCmdUnknown indicates source argument is not known. 
+			);
+
+7) To scroll through the recordset:
+
+	while (!rs->Get_EOF())
+	{
+		_variant_t CustomerID=rs->GetCollect(L"CustomerID");
+		_variant_t CompanyName=rs->GetCollect(L"CompanyName");
+		_variant_t ContactName=rs->GetCollect(L"ContactName");
+		rs->Move(1);					//# of records to move (can be negative if adOpenDynamic in Open())
+	}
+	rs->MoveFirst();
+
+8) To add a record to the recordset use:
+	// will allow these depending on the locking mode the record set was open with
+	if (rs->Supports(adAddNew) && rs->Supports(adUpdate))
+	{
+
+	rs->AddNew();
+	rs->PutCollect(L"CustomerID",L"BONCO");
+	rs->PutCollect(L"CompanyName",L"Franks");
+	rs->PutCollect(L"ContactName",L"Runk");
+	rs->Update();
+	
+
+9) To modify a field in a row in a recordset:
+	rs->PutCollect(L"ContactName",L"Smith");
+	rs->Update();
+
+10) To delete a record from the recordset:
+	rs->Delete(
+		adAffectCurrent	//can also be adAffectGroup which deletes all rows in Filter object
+		);
+	}
+
+11)	To close the recordset:
+	rs->Close();
+
+12) To execute a stored procedure:
+
+	// specify timeout (optional)
+	command->PutCommandTimeout(
+				1000				//default is DEFAULT_DBCONNECTPROP
+				);
+
+	// specify stored procedure
+	command->PutCommandText(L"Customers Query");
+	command->PutCommandType(adCmdStoredProc);
+
+	// in order and one-by-one, add the calling parameter(s) required by the stored procedure
+	command->GetParameters()->Append(command->CreateParameter(
+			_bstr_t(""),		 		// a user assigned parameter name (optional)
+			adInteger,					// data type. other common ones:
+											 //	adUnsignedInt
+											 //	adBSTR 
+											 //	adArray|adBinary -- blob
+			adParamInput,				// direction. also:
+											 //	adParamOutput
+											 //	adParamInputOutput
+											 //	adParamReturnValue
+			5,							// database column size for this parameter required by SP (must be a long)
+			_variant_t(1234L) 			//if adParamInput or adParamInputOutput, the input value as a variant
+			));
+
+	// execute stored procedure
+	command->Execute(
+			NULL, 						// returned number of records affected
+			NULL, 						// an array of variants that can be used with command
+										//  (in lieu of appending above)
+			adCmdStoredProc				// what text in command specifies. also:
+										  // adCmdText - SQL statement
+										  // adCmdTable - table name
+										  // adCmdFile - file name
+										  // adCmdTableDirect - 
+										  // adCmdUnknown - unknown
+			);		
+
+	// retrieve an out parameter (if parameter direction is adParamOutput, adParamInputOutput or adParamReturnValue)
+	// retrieve a long from the zeroth parameter
+	long vt=command->GetParameters()->GetItem(_variant_t(0L))->GetValue().vt; //retrieve the 0 parameter
+	// retrieve a variant the zeroth parameter
+	_variant_t vart=command->GetParameters()->GetItem(_variant_t(0L))->GetValue().Detach();
+	
+13) To execute a stored procedure that returns a recordset:
+
+// specify stored procedure with spot where recordset will be returned marked with "resultset"
+	command->PutCommandText(L"{ call Wzd.Package.SP(?,?,?,?,{resultset 1024, my_out})}");	
+	command->PutCommandType(adCmdText);		
+
+// add input parameters only, one for each "?" in stored procedure call above
+	command->GetParameters()->Append(command->CreateParameter(
+			_bstr_t(""),		 		// a user assigned parameter name (optional)
+			adInteger,					// data type. other common ones:
+											 //	adUnsignedInt
+											 //	adBSTR 
+											 //	adArray|adBinary -- blob
+			adParamInput,
+			5,							// database column size for this parameter required by SP (must be a long)
+			_variant_t(1234L) 			//if adParamInput or adParamInputOutput, the input value as a variant
+			));
+
+
+// open, scroll through and close record set as above
+	rs->Open((_Command*)command,vtMissing,adOpenForwardOnly,adLockReadOnly,adCmdUnspecified);
+	rs->Close();
+
+14) To use transactions when not using MTS/COM+:
+	connection->BeginTrans();
+
+	connection->CommitTrans();
+
+	connection->RollbackTrans();
+
+
+
+15) To catch and scroll through ADO errors:
+	try
+	{
+		...using ADO COM objects...
+	}
+	catch(_com_error& e)
+	{
+		ErrorsPtr pErrors=connection->GetErrors();
+		if (pErrors->GetCount()==0)
+		{
+			AfxMessageBox(e.ErrorMessage());
+		}
+		else
+		{
+			for (int i=0;i<pErrors->GetCount();i++)
+			{
+				_bstr_t desc=pErrors->GetItem((long)i)->GetDescription();
+				AfxMessageBox(desc);
+			}
+		}
+	}
+	catch(...)
+	{
+	}
+	
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

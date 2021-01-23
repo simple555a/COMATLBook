@@ -1,0 +1,46 @@
+// Server.odl : type library source for Server.dll
+
+// This file will be processed by the MIDL compiler to produce the
+// type library (Server.tlb).
+
+[ uuid(351495EA-AA6D-11D3-807E-000000000000), version(1.0) ]
+library Server
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+
+
+	//  Primary dispatch interface for CWzd
+	
+	[ uuid(351495F7-AA6D-11D3-807E-000000000000) ]
+	dispinterface IWzd
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CWzd)
+			[id(1)] long Property1;
+			//}}AFX_ODL_PROP
+			
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CWzd)
+			[id(2)] void Method1(long lArg);
+			//}}AFX_ODL_METHOD
+
+	};
+
+	//  Class information for CWzd
+
+	[ uuid(351495D1-AA6D-11D3-807E-000000000000) ]
+	coclass Wzd
+	{
+		[default] dispinterface IWzd;
+	};
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};

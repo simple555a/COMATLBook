@@ -1,0 +1,33 @@
+/////////////////////////////////////////////////////////////////////
+// How to use a callback COM object from with VB.
+/////////////////////////////////////////////////////////////////////
+1) Add the COM class to your VB project as usual using "Project/References..."
+
+2) Declare this COM class globally (above all subroutines) as follows:
+
+Dim WithEvents IWzdEvent As SERVERLib.Wzd
+
+3) Add a Form_Load() handler to your form by locating "Form" in the Object
+   combo box and "Load" in the Procedure combo box in the form editor. There
+   create an instance of this COM class:
+
+Private Sub Form_Load()
+    ' connects with object's connection point
+    Set IWzdEvent = New SERVERLib.Wzd
+End Sub
+
+4) Add a callback handler by locating "(General)" in the Object combo box
+   and the handler name in the Procedure combo box. The handler name will
+   be the variable name you assigned the class and the callback's method
+   name. The arguments are automatically determined from the type library:
+
+Private Sub IWzdEvent_Callback(ByVal lArg As Long)
+    MsgBox "called"
+End Sub
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

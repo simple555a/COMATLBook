@@ -1,0 +1,26 @@
+HKCR
+{
+	AggSvr.WzdAgSvr.1 = s 'WzdAgSvr Class'
+	{
+		CLSID = s '{853B853F-A88A-11D3-A398-00C04F570E2C}'
+	}
+	AggSvr.WzdAgSvr = s 'WzdAgSvr Class'
+	{
+		CLSID = s '{853B853F-A88A-11D3-A398-00C04F570E2C}'
+		CurVer = s 'AggSvr.WzdAgSvr.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {853B853F-A88A-11D3-A398-00C04F570E2C} = s 'WzdAgSvr Class'
+		{
+			ProgID = s 'AggSvr.WzdAgSvr.1'
+			VersionIndependentProgID = s 'AggSvr.WzdAgSvr'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{853B8532-A88A-11D3-A398-00C04F570E2C}'
+		}
+	}
+}

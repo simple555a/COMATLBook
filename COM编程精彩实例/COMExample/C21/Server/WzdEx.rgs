@@ -1,0 +1,26 @@
+HKCR
+{
+	Server.WzdEx.1 = s 'WzdEx Class'
+	{
+		CLSID = s '{4832AAD6-AB3F-11D3-8081-000000000000}'
+	}
+	Server.WzdEx = s 'WzdEx Class'
+	{
+		CLSID = s '{4832AAD6-AB3F-11D3-8081-000000000000}'
+		CurVer = s 'Server.WzdEx.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {4832AAD6-AB3F-11D3-8081-000000000000} = s 'WzdEx Class'
+		{
+			ProgID = s 'Server.WzdEx.1'
+			VersionIndependentProgID = s 'Server.WzdEx'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{4832AAC8-AB3F-11D3-8081-000000000000}'
+		}
+	}
+}

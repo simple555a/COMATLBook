@@ -1,0 +1,43 @@
+// CollSrv.idl : IDL source for CollSrv.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CollSrv.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(61790D42-A4D4-11D3-806F-000000000000),
+		dual,
+		helpstring("IWzdCollection Interface"),
+		pointer_default(unique)
+	]
+	interface IWzdCollection : IDispatch
+	{
+		[id(0), helpstring("method Item")] HRESULT Item([in] VARIANT Index, [out, retval] LPVARIANT pItem);
+		[id(1), helpstring("method Add"),restricted] HRESULT Add([in]SAFEARRAY(unsigned char)* NewObj);
+		[propget, id(2), helpstring("property Count")] HRESULT Count([out, retval] long *pVal);
+		[id(3), helpstring("method Init")] HRESULT Init([in]long numObjs);
+		[propget, id(-4), helpstring("property _NewEnum"),restricted] HRESULT _NewEnum( [out, retval] LPUNKNOWN* pVal);
+	};
+
+[
+	uuid(61790D36-A4D4-11D3-806F-000000000000),
+	version(1.0),
+	helpstring("CollectSrv 1.0 Type Library")
+]
+library COLLECTSRVLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(61790D43-A4D4-11D3-806F-000000000000),
+		helpstring("WzdCollection Class")
+	]
+	coclass WzdCollection
+	{
+		[default] interface IWzdCollection;
+	};
+};

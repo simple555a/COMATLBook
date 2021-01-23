@@ -1,0 +1,88 @@
+/////////////////////////////////////////////////////////////////////
+// How to use the COM object.
+/////////////////////////////////////////////////////////////////////
+1) The client should call the following to initialize the COM DLL from
+   the main process _and_ from any thread that will be using COM:
+
+	::CoInitializeEx(
+		NULL,				//always NULL
+		COINIT_APARTMENTTHREADED	//see book about threading models
+		);
+
+	NOTE: You also need to add _WIN32_DCOM to your project settings under 
+	"Preprocessor definitions" in order to get the prototype definition for
+	::CoInitializeEx() included in your compile.
+
+
+2) Import the COM class's DLL, EXE, TLB, or OCX file into the source file
+   that will be using the object:
+
+//Using the following requires you to specify a scope for every reference
+//to the COM class (i.e. SERVERLib::IWzdPtr) (This scope is the name of the
+//name used in the Library statement in the IDL file.)
+#import "server\server.tlb"
+
+//You don't need the scope operator with the no_namespace designation:
+#import "server\server.tlb" no_namespace
+
+//Using the following keeps the compiler from adding extra error checking
+//code around every method call you make to the imported COM object. If
+//you want to customize the way you handle errors, use this:
+#import "server\server.tlb" raw_interfaces_only
+
+3) To create a COM object, use this:
+
+		IWzdPtr pPtr1(
+				__uuidof(Wzd)		//guid of DLL or EXE that contains class
+				);
+
+where the class name is the original interface name (ex: IWzd) with a "Ptr"
+suffix.
+
+4) To create the object using a smart pointer's method instead of in its constructor
+   so that you can get the error code, use:
+
+	IWzdPtr pPtr2;
+	HRESULT hr=pPtr2.CreateInstance(
+				__uuidof(Wzd)		//guid of DLL or EXE that contains class
+				);
+
+5) To call it's member variables, use this:
+
+		pPtr1->Method1(1234);
+
+Note that even though the class is created on the stack, the pointer operator
+is used. Smart pointers override the pointer operator to denote you are accessing
+the methods of the created object. To access the methods of the smart pointer class
+(ex: QueryInterface()), use the dot syntax (pPtr.QueryInterface()).
+
+6) To catch COM errors, use:
+
+	try
+	{
+	}
+	catch (_com_error &err)
+	{
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+7) Unless you use the raw_interfaces_only attribute when importing
+   a COM class's type library, method calls will check to make sure
+   a object is created and will also throw a _com_error structure if
+   the method returns a failure. If no error occurs, the method call
+   will also make any retval argument into a returned value:
+
+	HRESULT hr=pPtr1->Method1(&retval);
+
+	becomes:
+
+	long retval=pPtr->Method1();
+
+	
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

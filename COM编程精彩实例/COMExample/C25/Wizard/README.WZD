@@ -1,0 +1,88 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the ATL COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) Create an interface server project as specified in the book.
+
+2) Create a guids.h file that contains the interface ID of the class that
+   the client will implement for callbacks and include it in the server's
+   application cpp file:
+
+#if !defined guids_h
+#define guids_h
+
+const IID IID_IWzdSink = {0x20050FE0,0xA719,0x11d3,{0xA3,0x98,0x00,0xC0,0x4F,0x57,0x0E,0x2C}};
+
+#endif 
+
+
+3) Create the server as usual using the ATL COM AppWizard.
+
+4) Create the COM class as usual using the ATL Object Wizard except
+   specifying "Support connections point".
+
+5) To the generated .h file, reference the interface ID as follows:
+
+EXTERN_C const IID IID_IWzdSink;
+
+
+6) Also to the .h file you'll find a connection point map. There
+   you add a connection point macro that specifies the interface ID(s)
+   in guids.h:
+   
+BEGIN_CONNECTION_POINT_MAP(CWzd)
+	CONNECTION_POINT_ENTRY(IID_IWzdSink)
+END_CONNECTION_POINT_MAP()
+
+7) Also to the .h file, add the following class and method that will doing
+   the actual calling of the client. Change "pWzdSinks->Callback(lArg)" to
+   whatever is specified in the callback interface:
+
+
+template <class T>
+class CProxyIWzdSinkEvents : public IConnectionPointImpl<T, &IID_IWzdSink, CComDynamicUnkArray>
+{
+public:
+	HRESULT Fire_WzdSink( long lArg )
+	{
+		T* pT = (T*)this;
+		pT->Lock();
+		HRESULT ret;
+		IUnknown** pp = m_vec.begin();
+		while (pp < m_vec.end())
+		{
+			if (*pp != NULL)
+			{
+				IWzdSink *pWzdSinks = reinterpret_cast<IWzdSink*>(*pp);
+				ret = pWzdSinks->Callback( lArg );
+			}
+			pp++;
+		}
+		pT->Unlock();
+		return ret;
+	}
+};
+
+8) Also add this class as one of the base classes of the COM class you
+   are creating:
+
+class ATL_NO_VTABLE CWzd : 
+	public CComObjectRootEx<CComSingleThreadModel>,
+	public CComCoClass<CWzd, &CLSID_Wzd>,
+	public IConnectionPointContainerImpl<CWzd>,
+	public IDispatchImpl<IWzd, &IID_IWzd, &LIBID_SERVERLib>,
+	public CProxyIWzdSinkEvents<CWzd> //<<<<<<added
+
+
+9) Then anywhere in this COM class call the client with:
+
+	HRESULT hr=Fire_WzdSink(1234);
+	
+10) How to connect to this class using MFC, VB or J++ can be found in 
+    those examples.
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

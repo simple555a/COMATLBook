@@ -1,0 +1,132 @@
+/////////////////////////////////////////////////////////////////////
+// How to write the first COM object.
+/////////////////////////////////////////////////////////////////////
+
+1) When using the ATL Object Wizard to create your COM object, make sure
+   to specify Yes or Only for Aggregation.
+
+/////////////////////////////////////////////////////////////////////
+// How to write a second COM object to aggregate the first object.
+/////////////////////////////////////////////////////////////////////
+1) Create a guids.h file that contains the class and interface ID's for
+   the COM class you wish to aggregate. This class should look something
+   like this:
+
+#if !defined guids_h
+#define guids_h
+
+const CLSID CLSID_WzdAgSvr = {0x853B853F,0xA88A,0x11D3,{0xA3,0x98,0x00,0xC0,0x4F,0x57,0x0E,0x2C}};
+const IID IID_IWzdAgSvr = {0x853B853E,0xA88A,0x11D3,{0xA3,0x98,0x00,0xC0,0x4F,0x57,0x0E,0x2C}};
+
+#endif 
+
+
+2) Use the ATL Object Wizard to create the object as usual, but then you
+   need to manually add code to the generated .h file as shown in the following 
+   steps.
+
+3) Include the guids.h file you just created:
+
+#include "guids.h"
+
+4) At the bottom of the .h file add a new member variable that will contain a 
+   pointer to the aggregated object:
+
+private:
+	LPUNKNOWN m_pUnknown;
+
+5) Initialize this member variable to NULL in the constructor:
+
+	CWzdSrv()
+	{
+		m_pUnknown=NULL;
+	}
+
+6) Add a final constructor to the class where you will create an instance of
+   the aggregated object:
+	HRESULT FinalConstruct( )
+	{
+		HRESULT hr=::CoCreateInstance(CLSID_WzdAgSvr, 
+					GetControllingUnknown(), CLSCTX_ALL,
+					IID_IUnknown, (LPVOID*)&m_pUnknown);
+		return hr;
+	}
+
+7) Add a final release to the class where you will release the aggregated object:
+
+	void FinalRelease()
+	{
+		m_pUnknown->Release();
+	}
+
+8) Add the following macro which allows you to call 
+   GetControllingUnknown() in step 6:
+	
+DECLARE_GET_CONTROLLING_UNKNOWN()
+   
+9) Add an aggregating macro to the interface map specifying the interface that's
+   being aggregated and the instance of the object that was aggregated:
+
+BEGIN_COM_MAP(CWzdSrv)
+	COM_INTERFACE_ENTRY(IWzdSrv)
+	COM_INTERFACE_ENTRY(IDispatch)
+	COM_INTERFACE_ENTRY_AGGREGATE(IID_IWzdAgSvr,m_pUnknown)
+END_COM_MAP()
+
+NOTE: You can also use the following aggregation macro and avoid step 6:
+	COM_INTERFACE_ENTRY_AGGREGATE_AUTO(CLSID_WzdAgSvr,IID_IWzdAgSvr,m_pUnknown)
+
+
+
+/////////////////////////////////////////////////////////////////////
+// How to use the COM object.
+/////////////////////////////////////////////////////////////////////
+1) The client should call the following to initialize the COM DLL from
+   the main process _and_ from any thread that will be using COM:
+
+	::CoInitializeEx(
+		NULL,				//always NULL
+		COINIT_APARTMENTTHREADED	//see book about threading models
+		);
+
+	NOTE: You also need to add _WIN32_DCOM to your project settings under 
+	"Preprocessor definitions" in order to get the prototype definition for
+	::CoInitializeEx() included in your compile.
+
+2) Import both the type library from the aggregated object as well as the
+   object that aggregates it:
+
+#import "server\server.tlb" no_namespace
+#import "aggsvr\aggsvr.tlb" no_namespace
+
+3) Create the aggregating object as usual:
+
+	IWzdSrvPtr pPtr;
+	HRESULT hr=pPtr.CreateInstance(__uuidof(WzdSrv));
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		AfxMessageBox(err.ErrorMessage());
+		return;
+	}
+
+4) To get the interface to the aggregated object you can call QueryInterface()
+   directly or just use the built-in functionality of your smart pointer:
+	// if fails to find interface, throws _com_error
+	IWzdAgSvrPtr pAgg(pPtr);
+
+5) You can then call the methods of either interface of the same object:
+
+	long lArg;
+	pAgg->Method1(1234,&lArg);
+	
+	long lArg2=12345678L;
+	unsigned long ulArg=4026531840L;
+	pPtr->Method2(lArg2, ulArg);
+
+
+/////////////////////////////////////////////////////////////////////
+// From: COM Programming by Example by John E. Swanke
+// Copyright (C) 2000 jeswanke. All rights reserved.
+/////////////////////////////////////////////////////////////////////
+

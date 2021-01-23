@@ -1,0 +1,72 @@
+// AggSvr.odl : type library source for AggSvr.dll
+
+// This file will be processed by the MIDL compiler to produce the
+// type library (AggSvr.tlb).
+
+[ uuid(603F1DFB-A7D8-11D3-A398-00C04F570E2C), version(1.0) ]
+library AggSvr
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+
+
+
+	//  Primary dispatch interface for CWzdAgg
+	
+	[ uuid(603F1E08-A7D8-11D3-A398-00C04F570E2C) ]
+	dispinterface IWzdAgg
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CWzdAgg)
+			//}}AFX_ODL_PROP
+			
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CWzdAgg)
+			//}}AFX_ODL_METHOD
+
+	};
+
+	//  Class information for CWzdAgg
+
+	[ uuid(603F1E09-A7D8-11D3-A398-00C04F570E2C) ]
+	coclass WzdAgg
+	{
+		[default] dispinterface IWzdAgg;
+	};
+
+
+	//  Primary dispatch interface for CWzdAgSvr
+	
+	[ uuid(603F1E0B-A7D8-11D3-A398-00C04F570E2C) ]
+	dispinterface IWzdAgSvr
+	{
+		properties:
+			// NOTE - ClassWizard will maintain property information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_PROP(CWzdAgSvr)
+			//}}AFX_ODL_PROP
+			
+		methods:
+			// NOTE - ClassWizard will maintain method information here.
+			//    Use extreme caution when editing this section.
+			//{{AFX_ODL_METHOD(CWzdAgSvr)
+			//}}AFX_ODL_METHOD
+
+	};
+
+	//  Class information for CWzdAgSvr
+
+	[ uuid(603F1E0C-A7D8-11D3-A398-00C04F570E2C) ]
+	coclass WzdAgSvr
+	{
+		[default] dispinterface IWzdAgSvr;
+	};
+
+	//{{AFX_APPEND_ODL}}
+	//}}AFX_APPEND_ODL}}
+};
